@@ -1,0 +1,9 @@
+[Unit]
+Description=Blueberry
+After=network.target
+
+[Service]
+Type=simple
+User=blueberry
+WorkingDirectory={{dir}}
+ExecStart=/usr/bin/python3 ./blueberry/main.py

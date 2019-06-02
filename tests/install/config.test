@@ -1,0 +1,23 @@
+# @Author: michael
+# @Date:   02-Jun-2019
+# @Filename: config.py
+# @Last modified by:   michael
+# @Last modified time: 02-Jun-2019
+# @License: GNU GPL v3
+
+
+# Il faut completer ce fichier puis le renommer config.py
+
+
+# Token du Bot Telegram
+bot_token = "fffff"
+
+# Utilisateurs
+user = [00000]
+
+# Log
+log = "./log/blueberry.log"
+dir = "./"
+
+# hosts
+hosts = ['00.00.00.00']

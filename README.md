@@ -31,7 +31,7 @@ Nous en sommes à la **version 0.1**.
 - Analyse du réseau et détection des vulnérabilités critiques
 - Cartographie du réseaux sous format graphique
 
-### Objectifs pour la **version 3.0**:
+### Objectifs pour la **version 3.0**:
 
 - Analyser à la demande les machines sur le réseaux pour en connaître leur vulnérabilités
 - Envoyer ce Bilan à l'administrateur du réseaux
