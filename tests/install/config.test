@@ -11,13 +11,15 @@
 
 # Token du Bot Telegram
 bot_token = "fffff"
+ossec_token = "000"
+chat_id = "0000"
 
 # Utilisateurs
 user = [00000]
 
 # Log
-log = "./log/blueberry.log"
-dir = "./"
+log = "/home/blueberry/log/blueberry.log"
+dir = "/home/blueberry"
 
 # hosts
 hosts = ['00.00.00.00']

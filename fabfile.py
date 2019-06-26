@@ -42,7 +42,7 @@ def copy_config():
 def config_service():
     """Configure le service Blueberry."""
     local(
-        "sed -e \"s/{{dir}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(cfg.dir))
+        "sed -e \"s/{{{{dir}}}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(cfg.dir.replace("/", "\/")))
     local("chown root: /etc/systemd/system/blueberry.service")
     local("systemctl enable blueberry.service")
 
@@ -63,6 +63,10 @@ def config_ossec():
 
 def config_zeek():
     pass
+
+
+def uninstall():
+    local("rm /etc/systemd/system/blueberry.service")
 
 
 def commit():
