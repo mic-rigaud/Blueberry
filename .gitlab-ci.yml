@@ -2,7 +2,7 @@
 # @Date:   24-Sep-2018
 # @Filename: .gitlab-ci.yml
 # @Last modified by:   michael
-# @Last modified time: 02-Jun-2019
+# @Last modified time: 26-Jun-2019
 # @License: GNU GPL v3
 
 stages:
@@ -17,7 +17,7 @@ test:
       - pip3 install -r requirements.txt
       - cp ./tests/install/config.test ./config.py
       - fab install
-      - systemctl start blueberry
+      - fab start_local
 
 
 code_quality:

@@ -36,10 +36,21 @@ Nous en sommes à la **version 0.1**.
 - Analyser à la demande les machines sur le réseaux pour en connaître leur vulnérabilités
 - Envoyer ce Bilan à l'administrateur du réseaux
 
+## Installation
+
+Tout d'abord il faut copier config.py.exemple en config.py
+'cp config.py.exemple config.py'
+Puis il faut compléter le fichier de configuration
+
+Ensuite:
+'pip3 install -r requirements.txt'
+'fab install'
+'fab start_local'
+
 ## FAQ
 
 ### Pourquoi ce nom?
 
 Ce nom a été choisi pour deux raisons:
-- Premièrement, Blueberry à pour but d'être installé sur un raspberry. Et les gâteau aux myrtilles et aux framboises sont les meilleurs!
+- Premièrement, Blueberry a pour but d'être installé sur un raspberry. Et les gâteau aux myrtilles et aux framboises sont les meilleurs!
 - Deuxièmement, ce logiciel doit chasser les intrus sur notre réseau. On peut voir le parallèle avec la BD de cow-boy de même nom... On va chasser les méchants!

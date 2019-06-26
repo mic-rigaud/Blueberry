@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: fabfile.py
 # @Last modified by:   michael
-# @Last modified time: 02-Jun-2019
+# @Last modified time: 26-Jun-2019
 # @License: GNU GPL v3
 
 from __future__ import with_statement
@@ -28,16 +28,41 @@ def test():
 def install():
     """Install blueberry."""
     copy_config()
-    local(
-        "sed -e \"s/{{dir}}/coucou/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service")
-    local("chown root: /etc/systemd/system/blueberry.service")
-    local("systemctl enable blueberry.service")
+    config_service()
+    config_ossec()
+    config_zeek()
 
 
 def copy_config():
     """Copy le fichier de config a cote du main."""
     # TODO: Test que le fichier de config est propre
     local("cp config.py blueberry/config.py")
+
+
+def config_service():
+    """Configure le service Blueberry."""
+    local(
+        "sed -e \"s/{{dir}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(cfg.dir))
+    local("chown root: /etc/systemd/system/blueberry.service")
+    local("systemctl enable blueberry.service")
+
+
+def config_ossec():
+    """Install Bluebrry for Ossec."""
+    # TODO: Verifier que ossec est bien présent
+    local("cp install/sendEvent.sh /var/ossec/active-response/bin/")
+    local(
+        "sed -i \"s/{{token}}/{}/g\" /var/ossec/active-response/bin/sendEvent.sh".format(cfg.ossec_token))
+    local(
+        "sed -i \"s/{{chat_id}}/{}/g\" /var/ossec/active-response/bin/sendEvent.sh".format(cfg.chat_id))
+    local("chown root:ossec /var/ossec/active-response/bin/sendEvent.sh")
+    local("chmod 750 /var/ossec/active-response/bin/sendEvent.sh")
+    # TODO: rajouter la partie command dans ossec.conf
+    local("systemctl restart ossec")
+
+
+def config_zeek():
+    pass
 
 
 def commit():

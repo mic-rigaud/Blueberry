@@ -14,6 +14,7 @@ import sys
 import config as cfg
 import telegram
 from api.button import button
+from api.Restricted import restricted
 from telegram.ext import (CallbackQueryHandler, CommandHandler, Filters,
                           MessageHandler, Updater)
 
@@ -28,6 +29,7 @@ logging.basicConfig(
 help_list = []
 
 
+@restricted
 def unknown(bot, update):
     """Gere la reponse pour une commande inconnue."""
     bot.send_message(
@@ -35,6 +37,7 @@ def unknown(bot, update):
         text="Commande inconnue")
 
 
+@restricted
 def help(bot, update, args):
     """Affiche l'aide."""
     demande = ' '.join(args).lower().split(" ")[0]
