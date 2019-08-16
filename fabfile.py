@@ -3,11 +3,12 @@
 # @Project: Blueberry
 # @Filename: fabfile.py
 # @Last modified by:   michael
-# @Last modified time: 26-Jun-2019
+# @Last modified time: 16-Aug-2019
 # @License: GNU GPL v3
 
 from __future__ import with_statement
 
+import blueberrycore.api.api_bdd as bdd
 import config as cfg
 from fabric.api import abort, cd, env, local, run, settings
 from fabric.contrib.console import confirm
@@ -25,6 +26,15 @@ def test():
         abort("Annulation sur demande utilisateur.")
 
 
+def test_code():
+    """Lance code security analyse."""
+    with settings(warn_only=True):
+        result = local('bandit -r ./ -x *config.py', capture=True)
+    print(result)
+    if result.failed and not confirm("Tests failed. Continue anyway?"):
+        abort("Aborting at user request.")
+
+
 def install():
     """Install blueberry."""
     copy_config()
@@ -36,7 +46,8 @@ def install():
 def copy_config():
     """Copy le fichier de config a cote du main."""
     # TODO: Test que le fichier de config est propre
-    local("cp config.py blueberry/config.py")
+    local("cp config.py blueberryui/config.py")
+    local("cp config.py blueberrycore/config.py")
 
 
 def config_service():
@@ -44,7 +55,9 @@ def config_service():
     local(
         "sed -e \"s/{{{{dir}}}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(cfg.dir.replace("/", "\/")))
     local("chown root: /etc/systemd/system/blueberry.service")
-    local("systemctl enable blueberry.service")
+    # Permet d'éviter de planter dans les runner Gitlab-CI
+    with settings(warn_only=True):
+        result = local("systemctl enable blueberry.service")
 
 
 def config_ossec():
@@ -65,6 +78,15 @@ def config_zeek():
     pass
 
 
+def config_bdd():
+    """Permet l'installation de la BDD automatise."""
+    try:
+        bdd.db.connect
+        bdd.db.create_tables([bdd.Ip])
+    except:
+        print("=== La base SQL existe déjà ===")
+
+
 def uninstall():
     local("rm /etc/systemd/system/blueberry.service")
 
@@ -82,6 +104,7 @@ def push():
 def prepare_deploy():
     """Test + commit + push."""
     test()
+    test_code()
     commit()
     push()
 
@@ -102,8 +125,8 @@ def stop_server():
 
 def clean():
     """Netoie les logs."""
+    local("rm log/blueberry.log")
     cmd = "rm " + cfg.log
-    local(cmd)
     code_dir = cfg.dir
     with cd(code_dir):
         run(cmd)
@@ -111,5 +134,5 @@ def clean():
 
 def start_local(args=""):
     """Demarre en local."""
-    commande = "python3 blueberry/main.py" + args
+    commande = "python3 blueberry-ui/main.py" + args
     local(commande)
