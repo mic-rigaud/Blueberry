@@ -23,3 +23,6 @@ dir = "/home/blueberry"
 
 # hosts
 hosts = ['00.00.00.00']
+
+# nids
+freq_nids = 1

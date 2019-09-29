@@ -3,27 +3,40 @@
 # @Project: Blueberry
 # @Filename: fabfile.py
 # @Last modified by:   michael
-# @Last modified time: 16-Aug-2019
+# @Last modified time: 29-Sep-2019
 # @License: GNU GPL v3
 
 from __future__ import with_statement
 
-import blueberrycore.api.api_bdd as bdd
+from datetime import datetime, timedelta, timezone
+
 import config as cfg
-from fabric.api import abort, cd, env, local, run, settings
+from fabric.api import abort, env, local, run, settings
+from fabric.context_managers import cd, lcd
 from fabric.contrib.console import confirm
+
+import blueberrycore.api.api_bdd as bdd
 
 env.hosts = cfg.hosts
 
 
-# TODO: Il va falloir penser au package mock
+def prepare_data_test():
+    """Creer les data nécéssaires aux tests."""
+    offset = timezone(timedelta(hours=2))
+    date = datetime.now(offset).strftime("%Y-%m-%dT%H:%M:%S.%f%z")
+    local("sed 's/{DATE}/" + date +
+          "/g' blueberryui/tests/data/suricata-log.temp.json > blueberryui/tests/data/suricata-log.json")
+
+
 def test():
     """Lance test unitaire."""
-    with settings(warn_only=True):
-        result = local('py.test', capture=True)
-    print(result)
-    if result.failed and not confirm("Les tests ont échoué. On continue?"):
-        abort("Annulation sur demande utilisateur.")
+    prepare_data_test()
+    with lcd("./blueberryui"):
+        with settings(warn_only=True):
+            result = local('python -m pytest --cov=. tests', capture=True)
+            print(result)
+    if result.failed and not confirm("Tests failed. Continue anyway?"):
+        abort("Aborting at user request.")
 
 
 def test_code():
@@ -134,5 +147,5 @@ def clean():
 
 def start_local(args=""):
     """Demarre en local."""
-    commande = "python3 blueberry-ui/main.py" + args
+    commande = "python3 blueberryui/main.py" + args
     local(commande)
