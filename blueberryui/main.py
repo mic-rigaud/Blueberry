@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: main.py
 # @Last modified by:   michael
-# @Last modified time: 24-Sep-2019
+# @Last modified time: 13-Nov-2019
 # @License: GNU GPL v3
 
 
@@ -13,10 +13,12 @@ import sys
 
 import config as cfg
 import telegram
+from telegram import Update
+from telegram.ext import (CallbackContext, CallbackQueryHandler,
+                          CommandHandler, Filters, MessageHandler, Updater)
+
 from api.button import button
 from api.Restricted import restricted
-from telegram.ext import (CallbackQueryHandler, CommandHandler, Filters,
-                          MessageHandler, Updater)
 
 sys.path.append(os.path.dirname(os.getcwd()))
 sys.path.append(os.getcwd())
@@ -30,17 +32,17 @@ HELP_LIST = []
 
 
 @restricted
-def unknown(bot, update):
+def unknown(update: Update, context: CallbackContext):
     """Gere la reponse pour une commande inconnue."""
-    bot.send_message(
+    context.bot.send_message(
         chat_id=update.message.chat_id,
         text="Commande inconnue")
 
 
 @restricted
-def help(bot, update, args):
+def help(update: Update, context: CallbackContext):
     """Affiche l'aide."""
-    demande = ' '.join(args).lower().split(" ")[0]
+    demande = ' '.join(context.args).lower().split(" ")[0]
     reponse = "Blueberry possède les plugins suivants:\n\n"
     for mod in HELP_LIST:
         doc = mod.__doc__
@@ -50,7 +52,7 @@ def help(bot, update, args):
                 reponse += "<b>" + nom + "</b> : " + doc + "\n"
             elif demande in nom:
                 reponse = mod.add.__doc__
-    bot.send_message(
+    context.bot.send_message(
         chat_id=update.message.chat_id,
         text=reponse,
         parse_mode=telegram.ParseMode.HTML)
@@ -75,7 +77,7 @@ def charge_plugins(dispatcher):
 if __name__ == "__main__":
     logging.info("Demarrage de Blueberry")
 
-    updater = Updater(token=cfg.bot_token)
+    updater = Updater(token=cfg.bot_token, use_context=True)
     dispatcher = updater.dispatcher
     charge_plugins(dispatcher)
     updater.start_polling()

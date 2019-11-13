@@ -2,11 +2,16 @@
 # @Date:   27-Apr-2019
 # @Filename: button.py
 # @Last modified by:   michael
-# @Last modified time: 28-Apr-2019
+# @Last modified time: 13-Nov-2019
 # @License: GNU GPL v3
 import json
+import logging
 
 import telegram
+from telegram import Update
+from telegram.error import BadRequest
+from telegram.ext import CallbackContext
+
 from api.Restricted import restricted
 
 
@@ -23,8 +28,10 @@ def build_menu(buttons,
     return menu
 
 
+
+
 @restricted
-def button(bot, update, job_queue):
+def button(update: Update, context: CallbackContext):
     query = update.callback_query
     try:
         data = json.loads(query.data)
@@ -33,14 +40,16 @@ def button(bot, update, job_queue):
 
     module_name = data["module"]
     mod = __import__("actions." + module_name, fromlist=[''])
-    reponse, reply_markup = mod.button(bot, update, job_queue)
-
-    bot.edit_message_text(
-        text=reponse,
-        chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
-        parse_mode=telegram.ParseMode.HTML,
-        reply_markup=reply_markup)
+    reponse, reply_markup = mod.button(update, context)
+    try:
+        context.bot.edit_message_text(
+            text=reponse,
+            chat_id=query.message.chat_id,
+            message_id=query.message.message_id,
+            parse_mode=telegram.ParseMode.HTML,
+            reply_markup=reply_markup)
+    except BadRequest as ex:
+        logging.error("Error: meme message et meme reply_markup\n" + str(ex))
 
 
 def build_callback(data):

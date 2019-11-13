@@ -26,3 +26,4 @@ hosts = ['00.00.00.00']
 
 # nids
 freq_nids = 1
+suricata_log = '/home/blueberry/blueberryui/tests/data/suricata-log.json'

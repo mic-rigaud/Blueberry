@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: fabfile.py
 # @Last modified by:   michael
-# @Last modified time: 29-Sep-2019
+# @Last modified time: 13-Nov-2019
 # @License: GNU GPL v3
 
 from __future__ import with_statement
@@ -11,7 +11,7 @@ from __future__ import with_statement
 from datetime import datetime, timedelta, timezone
 
 import config as cfg
-from fabric.api import abort, env, local, run, settings
+from fabric.api import abort, env, local, run, settings, sudo
 from fabric.context_managers import cd, lcd
 from fabric.contrib.console import confirm
 
@@ -52,8 +52,9 @@ def install():
     """Install blueberry."""
     copy_config()
     config_service()
-    config_ossec()
-    config_zeek()
+    local("mkdir log")
+    # config_ossec()
+    # config_zeek()
 
 
 def copy_config():
@@ -124,11 +125,11 @@ def prepare_deploy():
 
 def deploy():
     """Deploy sur le serveur."""
-    prepare_deploy()
-    code_dir = cfg.dir
+    # prepare_deploy()
+    code_dir = cfg.hosts_dir
     with cd(code_dir):
-        run('git pull')
-        run('systemctl restart blueberry')
+        sudo('git pull')
+        sudo('systemctl restart blueberry')
 
 
 def stop_server():
