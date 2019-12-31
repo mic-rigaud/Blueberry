@@ -2,7 +2,7 @@
 # @Date:   26-Sep-2019
 # @Filename: nids-tools.py
 # @Last modified by:   michael
-# @Last modified time: 29-Sep-2019
+# @Last modified time: 31-Dec-2019
 # @License: GNU GPL v3
 
 
@@ -24,7 +24,7 @@ class NidsTools():
         offset = timezone(timedelta(hours=2))
         date_last_veille = datetime.now(offset) - timedelta(seconds=intervalle)
         logs_a_traiter = []
-        with open(self.log, 'r+') as file:
+        with open(self.log, 'r') as file:
             for line in file:
                 try:
                     log = json.loads(line)
