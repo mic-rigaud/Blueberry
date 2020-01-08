@@ -3,10 +3,12 @@
 # @Project: Major_Home
 # @Filename: nids.py
 # @Last modified by:   michael
-# @Last modified time: 13-Nov-2019
+# @Last modified time: 31-Dec-2019
 # @License: GNU GPL v3
 
 """Envoie les alarmes NIDS"""
+
+from datetime import datetime
 
 import config as cfg
 import telegram
@@ -16,14 +18,10 @@ from telegram.ext import CallbackContext, CommandHandler
 from api.nids_tools import NidsTools
 from api.Restricted import restricted
 
-#LOG = "/var/log/suricata/eve.json"
-#LOG = "./blueberryui/tests/data/suricata-log.json"
-INTERVALLE = 3600
-
 
 def job_veille(context):
     """Affiche les alarmes."""
-    logs = NidsTools(cfg.suricata_log).get_last_log(INTERVALLE)
+    logs = NidsTools(cfg.suricata_log).get_last_log(cfg.freq_nids)
     if logs != {}:
         for log in logs:
             if log["event_type"] == "alert":
@@ -35,7 +33,8 @@ def job_veille(context):
 def start_veille(job_queue):
     """Lance la veille."""
     job_queue.run_repeating(job_veille,
-                            INTERVALLE,
+                            cfg.freq_nids,
+                            first=datetime.now(),
                             name="veille_nids")
     return "Veille Lancé"
 
