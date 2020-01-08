@@ -35,7 +35,7 @@ def temperature_raspberry():
 
 
 def status_str():
-    reponse = "Les infos de votre raspberry"
+    reponse = "Les infos de votre raspberry:\n"
     reponse += "<b>Temperature:</b> " + temperature_raspberry() + "°C\n"
     reponse += "<b>CPU:</b> " + status_ram() + "%\n"
     reponse += "<b>RAM:</b> " + status_cpu() + "%\n"
