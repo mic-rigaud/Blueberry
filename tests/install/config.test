@@ -18,8 +18,8 @@ chat_id = "0000"
 user = [00000]
 
 # Log
-log = "/home/blueberry/log/blueberry.log"
-dir = "/home/blueberry"
+log = "/builds/mic-rigaud/blueberry/log/blueberry.log"
+dir = "/builds/mic-rigaud/blueberry"
 
 # hosts
 hosts = ['00.00.00.00']
