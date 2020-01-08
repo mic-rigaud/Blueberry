@@ -31,7 +31,7 @@ def status_ram():
 def temperature_raspberry():
     temp = psutil.sensors_temperatures()
     if 'cpu-thermal' in temp:
-        return temp['cpu-thermal'][0].current
+        return str(temp['cpu-thermal'][0].current)
     return "0"
 
 
