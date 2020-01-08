@@ -17,6 +17,7 @@ test:
       - pip3 install -r requirements.txt
       - cp ./tests/install/config.test ./config.py
       - fab install
+      - pwd
       - fab start_local
 
 
