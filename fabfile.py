@@ -33,7 +33,7 @@ def test():
     prepare_data_test()
     with lcd("./blueberryui"):
         with settings(warn_only=True):
-            result = local('python -m pytest --cov=. tests', capture=True)
+            result = local('python3 -m pytest --cov=. tests', capture=True)
             print(result)
     # if result.failed and not confirm("Tests failed. Continue anyway?"):
     #     abort("Aborting at user request.")
