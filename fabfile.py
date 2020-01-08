@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: fabfile.py
 # @Last modified by:   michael
-# @Last modified time: 13-Nov-2019
+# @Last modified time: 31-Dec-2019
 # @License: GNU GPL v3
 
 from __future__ import with_statement
@@ -52,6 +52,7 @@ def install():
     """Install blueberry."""
     copy_config()
     config_service()
+    config_bdd()
     local("mkdir log")
     # config_ossec()
     # config_zeek()
@@ -74,22 +75,22 @@ def config_service():
         result = local("systemctl enable blueberry.service")
 
 
-def config_ossec():
-    """Install Bluebrry for Ossec."""
-    # TODO: Verifier que ossec est bien présent
-    local("cp install/sendEvent.sh /var/ossec/active-response/bin/")
-    local(
-        "sed -i \"s/{{token}}/{}/g\" /var/ossec/active-response/bin/sendEvent.sh".format(cfg.ossec_token))
-    local(
-        "sed -i \"s/{{chat_id}}/{}/g\" /var/ossec/active-response/bin/sendEvent.sh".format(cfg.chat_id))
-    local("chown root:ossec /var/ossec/active-response/bin/sendEvent.sh")
-    local("chmod 750 /var/ossec/active-response/bin/sendEvent.sh")
-    # TODO: rajouter la partie command dans ossec.conf
-    local("systemctl restart ossec")
-
-
-def config_zeek():
-    pass
+# def config_ossec():
+#     """Install Bluebrry for Ossec."""
+#     # TODO: Verifier que ossec est bien présent
+#     local("cp install/sendEvent.sh /var/ossec/active-response/bin/")
+#     local(
+#         "sed -i \"s/{{token}}/{}/g\" /var/ossec/active-response/bin/sendEvent.sh".format(cfg.ossec_token))
+#     local(
+#         "sed -i \"s/{{chat_id}}/{}/g\" /var/ossec/active-response/bin/sendEvent.sh".format(cfg.chat_id))
+#     local("chown root:ossec /var/ossec/active-response/bin/sendEvent.sh")
+#     local("chmod 750 /var/ossec/active-response/bin/sendEvent.sh")
+#     # TODO: rajouter la partie command dans ossec.conf
+#     local("systemctl restart ossec")
+#
+#
+# def config_zeek():
+#     pass
 
 
 def config_bdd():
@@ -102,6 +103,7 @@ def config_bdd():
 
 
 def uninstall():
+    local("systemctl stop blueberry")
     local("rm /etc/systemd/system/blueberry.service")
 
 
@@ -134,16 +136,9 @@ def deploy():
 
 def stop_server():
     """Stop le serveur."""
-    run('systemctl stop blueberry')
-
-
-def clean():
-    """Netoie les logs."""
-    local("rm log/blueberry.log")
-    cmd = "rm " + cfg.log
-    code_dir = cfg.dir
+    code_dir = cfg.hosts_dir
     with cd(code_dir):
-        run(cmd)
+        sudo('systemctl stop blueberry')
 
 
 def start_local(args=""):

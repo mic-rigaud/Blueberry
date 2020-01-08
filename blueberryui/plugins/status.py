@@ -2,7 +2,6 @@
 """Affiche le status de la raspberry."""
 import psutil
 import telegram
-from gpiozero import CPUTemperature
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
 
@@ -12,8 +11,8 @@ from api.Restricted import restricted
 def status_suricata():
     """Retourne le status de suricata."""
     reponse = "☠️"
-    for proc in psutil.process_iter(attrs=['pid', 'name']):
-        if "suricata" in proc.info["name"]:
+    for proc in psutil.process_iter(attrs=['pid', 'name', 'status']):
+        if "suricata" in proc.info["name"].lower():
             reponse = "✅"
     return reponse
 
@@ -30,8 +29,10 @@ def status_ram():
 
 
 def temperature_raspberry():
-    cpu = CPUTemperature()
-    return str(cpu.temperature)
+    temp = psutil.sensors_temperatures()
+    if 'cpu-thermal' in temp:
+        return temp['cpu-thermal'][0].current
+    return "0"
 
 
 def status_str():
