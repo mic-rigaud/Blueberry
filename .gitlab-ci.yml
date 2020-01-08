@@ -17,7 +17,8 @@ test:
       - pip3 install -r requirements.txt
       - cp ./tests/install/config.test ./config.py
       - fab install
-      - fab start_local
+      #- fab start_local
+      -fab test
 
 
 code_quality:
