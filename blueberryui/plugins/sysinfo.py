@@ -1,5 +1,13 @@
+# @Author: michael
+# @Date:   11-Jan-2020
+# @Filename: sysinfo.py
+# @Last modified by:   michael
+# @Last modified time: 11-Jan-2020
+# @License: GNU GPL v3
+
 
 """Affiche le status de la raspberry."""
+
 import psutil
 import telegram
 from telegram import Update
@@ -45,7 +53,7 @@ def status_str():
 
 
 @restricted
-def status(update: Update, context: CallbackContext):
+def sysinfo(update: Update, context: CallbackContext):
     """Affiche le status de la raspberry."""
     reponse = status_str()
     context.bot.send_message(chat_id=update.message.chat_id,
@@ -57,5 +65,5 @@ def add(dispatcher):
     """
     Affiche le status de la raspberry.
     """
-    handler = CommandHandler('status', status)
+    handler = CommandHandler('sysinfo', sysinfo)
     dispatcher.add_handler(handler)

@@ -35,8 +35,8 @@ def test():
         with settings(warn_only=True):
             result = local('python3 -m pytest --cov=. tests', capture=True)
             print(result)
-    # if result.failed and not confirm("Tests failed. Continue anyway?"):
-    #     abort("Aborting at user request.")
+    if result.failed and not confirm("Tests failed. Continue anyway?"):
+        abort("Aborting at user request.")
 
 
 def test_code():
