@@ -24,6 +24,9 @@ from api.Restricted import restricted
 def job_veille(context):
     """Affiche les alarmes."""
     logs = NidsTools(cfg.suricata_log).get_last_log(cfg.freq_nids)
+    if logs == "PermissionError":
+        context.bot.send_message(chat_id=245779512,
+                                 text=logs)
     if logs != {}:
         for log in logs:
             if log["event_type"] == "alert":

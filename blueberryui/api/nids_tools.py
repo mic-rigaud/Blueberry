@@ -21,19 +21,22 @@ class NidsTools():
 
     def get_last_log(self, intervalle):
         """Permet de recuperer les derniers logs."""
-        offset = timezone(timedelta(hours=2))
-        date_last_veille = datetime.now(offset) - timedelta(seconds=intervalle)
-        logs_a_traiter = []
-        with open(self.log, 'r') as file:
-            for line in file:
-                try:
+        try:
+            offset = timezone(timedelta(hours=2))
+            date_last_veille = datetime.now(offset) - timedelta(seconds=intervalle)
+            logs_a_traiter = []
+            with open(self.log, 'r') as file:
+                for line in file:
                     log = json.loads(line)
                     date = datetime.strptime(log["timestamp"], "%Y-%m-%dT%H:%M:%S.%f%z")
                     if date > date_last_veille:
                         logs_a_traiter.append(log)
-                except Exception as exception:
-                    logging.info(exception)
-        return logs_a_traiter
+            return logs_a_traiter
+        except PermissionError:
+            logging.error("Permission Error")
+            return "PermissionError"
+        except Exception as exception:
+            logging.warning(exception)
 
     def get_rules(self):
         """Donne les regles appliqués."""
