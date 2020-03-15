@@ -61,12 +61,10 @@ def help(update: Update, context: CallbackContext):
 def charge_plugins(dispatcher):
     """Charge l'ensemble des plugins."""
     lst_import = os.listdir("./blueberryui/plugins")
-    for module in lst_import:
-        if ".py" in module:
-            module_name = module.split(".py")[0]
-            mod = __import__("plugins." + module_name, fromlist=[''])
-            mod.add(dispatcher)
-            HELP_LIST.append(mod)
+    for module_name in lst_import:
+        mod = __import__("plugins." + module_name, fromlist=[''])
+        mod.add(dispatcher)
+        HELP_LIST.append(mod)
     help_handler = CommandHandler('help', help, pass_args=True)
     dispatcher.add_handler(help_handler)
     unknown_handler = MessageHandler(Filters.command, unknown)

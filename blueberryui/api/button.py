@@ -2,7 +2,7 @@
 # @Date:   27-Apr-2019
 # @Filename: button.py
 # @Last modified by:   michael
-# @Last modified time: 13-Nov-2019
+# @Last modified time: 04-Nov-2019
 # @License: GNU GPL v3
 import json
 import logging
@@ -28,8 +28,6 @@ def build_menu(buttons,
     return menu
 
 
-
-
 @restricted
 def button(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -41,6 +39,7 @@ def button(update: Update, context: CallbackContext):
     module_name = data["module"]
     mod = __import__("actions." + module_name, fromlist=[''])
     reponse, reply_markup = mod.button(update, context)
+
     try:
         context.bot.edit_message_text(
             text=reponse,

@@ -2,14 +2,14 @@
 # @Date:   29-Sep-2019
 # @Filename: test_nids_tools.py
 # @Last modified by:   michael
-# @Last modified time: 29-Sep-2019
+# @Last modified time: 15-Mar-2020
 # @License: GNU GPL v3
 
 import pytest
 
 from api.nids_tools import NidsTools
 
-LOG = "./tests/data/suricata-log.json"
+LOG = "./test/data/suricata-log.json"
 
 
 def test_get_last_log():

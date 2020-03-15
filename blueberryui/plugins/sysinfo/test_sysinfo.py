@@ -2,13 +2,13 @@
 # @Date:   29-Sep-2019
 # @Filename: test_nids_tools.py
 # @Last modified by:   michael
-# @Last modified time: 11-Jan-2020
+# @Last modified time: 15-Mar-2020
 # @License: GNU GPL v3
 
 import pytest
 
-from plugins.status import (status_cpu, status_ram, status_str,
-                            status_suricata, temperature_raspberry)
+from plugins.sysinfo.sysinfo import (status_cpu, status_ram, status_str,
+                                     status_suricata, temperature_raspberry)
 
 
 def test_status_cpu():

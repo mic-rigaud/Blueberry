@@ -3,7 +3,7 @@
 # @Project: Major_Home
 # @Filename: cartographie.py
 # @Last modified by:   michael
-# @Last modified time: 16-Aug-2019
+# @Last modified time: 31-Dec-2019
 # @License: GNU GPL v3
 
 """Cartographie le réseau."""
@@ -14,8 +14,9 @@ import socket
 
 import config as cfg
 import schedule
-from api.api_bdd import Ip
 from scapy.all import ICMP, IP, conf, srp
+
+from api.api_bdd import Ip
 
 
 def ping():
@@ -23,6 +24,7 @@ def ping():
     rang = '192.168.1.1-255'
     rep, non_rep = srp(IP(dst=rang) / ICMP(), timeout=0.5)
     for elem in rep:
+        print(elem)
         if elem[1].type == 0:  # 0 <=> echo-reply
             add_element(elem[0].dst)
         else:
@@ -51,7 +53,7 @@ def add_element(dst_ip):
     else:
         Ip.create(ip=dst_ip, host=dst_host).save()
         print("Ajout du couple: {}, {}".format(dst_host, dst_ip))
-        flush()
+        # Ip.flush()
         # send_alert(str(self.host), mac)
 
 
@@ -62,5 +64,5 @@ def cartographie():
 
 def add():
     """Ajout la fonction cartographie."""
-    schedule.every(cfg.cart_freq).hour.do(cartographie)
+    schedule.every(cfg.freq_carto).seconds.do(cartographie)
     cartographie()

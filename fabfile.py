@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: fabfile.py
 # @Last modified by:   michael
-# @Last modified time: 31-Dec-2019
+# @Last modified time: 15-Mar-2020
 # @License: GNU GPL v3
 
 from __future__ import with_statement
@@ -25,7 +25,7 @@ def prepare_data_test():
     offset = timezone(timedelta(hours=2))
     date = datetime.now(offset).strftime("%Y-%m-%dT%H:%M:%S.%f%z")
     local("sed 's/{DATE}/" + date +
-          "/g' blueberryui/tests/data/suricata-log.temp.json > blueberryui/tests/data/suricata-log.json")
+          "/g' blueberryui/test/data/suricata-log.temp.json > blueberryui/test/data/suricata-log.json")
 
 
 def test():
@@ -33,7 +33,7 @@ def test():
     prepare_data_test()
     with lcd("./blueberryui"):
         with settings(warn_only=True):
-            result = local('python3 -m pytest --cov=. tests', capture=True)
+            result = local('python3 -m pytest --cov=. ./', capture=True)
             print(result)
     if result.failed and not confirm("Tests failed. Continue anyway?"):
         abort("Aborting at user request.")
@@ -42,7 +42,7 @@ def test():
 def test_code():
     """Lance code security analyse."""
     with settings(warn_only=True):
-        result = local('bandit -r ./ -x *config.py', capture=True)
+        result = local('bandit -r ./ -x *config.py,*test*.py', capture=True)
     print(result)
     if result.failed and not confirm("Tests failed. Continue anyway?"):
         abort("Aborting at user request.")
