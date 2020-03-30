@@ -31,7 +31,8 @@ def job_veille(context):
         for log in logs:
             if log["event_type"] == "alert":
                 message = str(log)
-                if message != "":
+                test_empty = message.replace(' ', '').replace('\n', '')
+                if test_empty != "":
                     context.bot.send_message(chat_id=245779512,
                                              text=message)
 
