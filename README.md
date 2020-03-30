@@ -19,6 +19,7 @@ Cet outil permet superviser une sonde réseaux ainsi d'un ensemble d'autre outil
 | `\nids` | Permet de savoir si le job est activé. Lorsque c'est le cas, le script vérifie toutes les heures (fréquence configurable via config.py) si suricata a levé une alerte. |
 | `\sysinfo` | Donne l'état de la machine. |
 | `\log` | Affiche les logs de Blueberry. Permet aussi de les supprimer. |
+| `\logwatch` | Permet d'afficher le rapport logwatch. Le rapport est également envoyé tous les matins à 7h |
 | `\help` | Affiche l'aide. |
 
 

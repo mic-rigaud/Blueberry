@@ -72,8 +72,8 @@ def logwatch_liste():
 def creer_bouton():
     """Creer la liste de boutons."""
     button_list = [
-        InlineKeyboardButton("afficher", callback_data="log_liste"),
-        InlineKeyboardButton("etat job", callback_data="log_job"),
+        InlineKeyboardButton("afficher", callback_data="logwatch_liste"),
+        InlineKeyboardButton("etat job", callback_data="logwatch_job"),
         ]
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=2))
 
@@ -119,6 +119,6 @@ def add(dispatcher):
     rm - supprime les log
     """
     dispatcher.add_handler(CommandHandler('logwatch', logwatch, pass_args=True))
-    dispatcher.add_handler(CallbackQueryHandler(button_job, pattern="^log_job$"))
-    dispatcher.add_handler(CallbackQueryHandler(button_liste, pattern="^log_liste$"))
+    dispatcher.add_handler(CallbackQueryHandler(button_job, pattern="^logwatch_job$"))
+    dispatcher.add_handler(CallbackQueryHandler(button_liste, pattern="^logwatch_liste$"))
     start_veille(dispatcher.job_queue)
