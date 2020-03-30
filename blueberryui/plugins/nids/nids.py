@@ -17,22 +17,23 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from api.button import build_menu
-from api.nids_tools import NidsTools
 from api.Restricted import restricted
+from plugins.nids.nids_tools import NidsTools
 
 
 def job_veille(context):
     """Affiche les alarmes."""
     logs = NidsTools(cfg.suricata_log).get_last_log(cfg.freq_nids)
-    if logs == "PermissionError":
+    if logs == "PermissionError" or logs == "Exception":
         context.bot.send_message(chat_id=245779512,
                                  text=logs)
-    if logs != {}:
+    elif logs != {}:
         for log in logs:
             if log["event_type"] == "alert":
                 message = str(log)
-                context.bot.send_message(chat_id=245779512,
-                                         text=message)
+                if message != "":
+                    context.bot.send_message(chat_id=245779512,
+                                             text=message)
 
 
 def start_veille(job_queue):

@@ -2,50 +2,49 @@
 
 ## Description
 
-Cet outil doit être un outil pour superviser de la sécurité d'un réseau personnel. Il doit permettre notamment de:
-- donner un aperçu de l'ensemble des machines présentes sur le réseaux;
-- donner des fiches à appliquer;
-- proposer des sites pour renforcer votre sécurité;
-- proposer des analyses de votre réseaux pour en déterminer le niveau de sécurité global;
+Cet outil permet superviser une sonde réseaux ainsi d'un ensemble d'autre outils de sécurité, dont:
+- Suricata (NIDS)
+- logwatch
 
-Cet outil utilisera les outils suivants sur votre réseaux:
-
-- ping
-- nmap
-- arp
 
   Cet outil peut donc être considéré comme intrusif. Vérifié que vous avez bien l'accord de votre administrateur réseaux avant de déployer cet outil.
 
-## Suivi de versions
+## Commandes disponibles
 
-Nous en sommes à la **version 0.1**.
+`\help` permet d'afficher les commandes disponibles
 
-### Objectifs pour la **version 1.0**:
 
-- Analyser le réseau pour détecter toutes les machines présentes
-- Enregistrer les machines présentes avec leur MAC et leur nom DNS
-- Disposer d'une interface graphique permettant de lister les machines présentes, et de proposer d'autres outils
+| Commande | Description |
+| ------ | --- |
+| `\nids` | Permet de savoir si le job est activé. Lorsque c'est le cas, le script vérifie toutes les heures (fréquence configurable via config.py) si suricata a levé une alerte. |
+| `\sysinfo` | Donne l'état de la machine. |
+| `\log` | Affiche les logs de Blueberry. Permet aussi de les supprimer. |
+| `\help` | Affiche l'aide. |
 
-### Objectifs pour la **version 2.0**:
-
-- Analyse du réseau et détection des vulnérabilités critiques
-- Cartographie du réseaux sous format graphique
-
-### Objectifs pour la **version 3.0**:
-
-- Analyser à la demande les machines sur le réseaux pour en connaître leur vulnérabilités
-- Envoyer ce Bilan à l'administrateur du réseaux
 
 ## Installation
 
+*Vous n'avez rien a faire si vous utilisez le script d'installation [Blueberry-Ansible](https://gitlab.com/mic-rigaud/blueberry-ansible)*
+
 Tout d'abord il faut copier config.py.exemple en config.py
-'cp config.py.exemple config.py'
+
+```
+cp config.py.exemple config.py
+```
+
 Puis il faut compléter le fichier de configuration
 
-Ensuite:
-'pip3 install -r requirements.txt'
-'fab install'
-'fab start_local'
+```
+nano config.py
+```
+
+Enfin:
+```shell
+pip3 install -r requirements.txt
+fab install
+fab start_local
+```
+
 
 ## FAQ
 

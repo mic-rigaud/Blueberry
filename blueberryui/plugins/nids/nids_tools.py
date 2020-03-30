@@ -37,6 +37,7 @@ class NidsTools():
             return "PermissionError"
         except Exception as exception:
             logging.warning(exception)
+            return "Exception"
 
     def get_rules(self):
         """Donne les regles appliqués."""
