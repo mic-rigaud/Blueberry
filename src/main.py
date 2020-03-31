@@ -60,7 +60,7 @@ def help(update: Update, context: CallbackContext):
 
 def charge_plugins(dispatcher):
     """Charge l'ensemble des plugins."""
-    lst_import = os.listdir("./blueberryui/plugins")
+    lst_import = os.listdir("./src/plugins")
     for module_name in lst_import:
         if "_" not in module_name:
             mod = __import__("plugins." + module_name + '.' + module_name, fromlist=[''])

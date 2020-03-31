@@ -6,7 +6,7 @@
 # @License: GNU GPL v3
 
 
-"""Envoie les alarmes NIDS"""
+"""Envoie une carto """
 
 from datetime import datetime
 

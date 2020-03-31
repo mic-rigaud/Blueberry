@@ -6,4 +6,4 @@ After=network.target
 Type=simple
 User=blueberry
 WorkingDirectory={{dir}}
-ExecStart=/usr/bin/python3 ./blueberryui/main.py
+ExecStart=/usr/bin/python3 ./src/main.py

@@ -18,9 +18,6 @@ from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 from api.button import build_menu
 from api.Restricted import restricted
 
-REPORT = "/var/cache/logwatch/report"
-#REPORT = "./report-test"
-
 
 def job_veille(context):
     """Affiche les alarmes."""
@@ -52,7 +49,7 @@ def get_info_veille(job_queue):
 def logwatch_liste():
     try:
         reponse = ""
-        with open(REPORT, 'r') as file:
+        with open(cfg.logwatch_report, 'r') as file:
             for line in file:
                 if line != "\n" and line != " \n":
                     if "End" in line:

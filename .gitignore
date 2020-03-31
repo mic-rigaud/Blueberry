@@ -95,3 +95,6 @@ ENV/
 major_home.*.json
 .mypy_cache
 .pytest_cache
+
+OLD
+*old*

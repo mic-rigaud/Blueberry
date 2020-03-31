@@ -15,7 +15,7 @@ from fabric.api import abort, env, local, run, settings, sudo
 from fabric.context_managers import cd, lcd
 from fabric.contrib.console import confirm
 
-import blueberrycore.api.api_bdd as bdd
+import src.api.api_bdd as bdd
 
 env.hosts = cfg.hosts
 
@@ -25,13 +25,13 @@ def prepare_data_test():
     offset = timezone(timedelta(hours=2))
     date = datetime.now(offset).strftime("%Y-%m-%dT%H:%M:%S.%f%z")
     local("sed 's/{DATE}/" + date +
-          "/g' blueberryui/test/data/suricata-log.temp.json > blueberryui/test/data/suricata-log.json")
+          "/g' src/test/data/suricata-log.temp.json > src/test/data/suricata-log.json")
 
 
 def test():
     """Lance test unitaire."""
     prepare_data_test()
-    with lcd("./blueberryui"):
+    with lcd("./src"):
         with settings(warn_only=True):
             result = local('python3 -m pytest --cov=. ./', capture=True)
             print(result)
@@ -61,8 +61,8 @@ def install():
 def copy_config():
     """Copy le fichier de config a cote du main."""
     # TODO: Test que le fichier de config est propre
-    local("cp config.py blueberryui/config.py")
-    local("cp config.py blueberrycore/config.py")
+    local("cp config.py src/config.py")
+    #local("cp config.py blueberrycore/config.py")
 
 
 def config_service():
@@ -143,5 +143,5 @@ def stop_server():
 
 def start_local(args=""):
     """Demarre en local."""
-    commande = "python3 blueberryui/main.py" + args
+    commande = "python3 src/main.py" + args
     local(commande)

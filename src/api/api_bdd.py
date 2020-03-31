@@ -35,12 +35,12 @@ class Ip(BaseModel):
     status = BooleanField(default=True)
 
 
-class Parametres(BaseModel):
-    """Objet definissant un Parametres pour la BDD."""
-
-    section = CharField()
-    key = CharField(unique=True)
-    value = CharField()
+# class Parametres(BaseModel):
+#     """Objet definissant un Parametres pour la BDD."""
+#
+#     section = CharField()
+#     key = CharField(unique=True)
+#     value = CharField()
 
 
 #
