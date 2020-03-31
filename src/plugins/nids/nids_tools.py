@@ -35,6 +35,9 @@ class NidsTools():
         except PermissionError:
             logging.error("Permission Error")
             return "PermissionError"
+        except FileNotFoundError as exception:
+            logging.warning(exception)
+            return "Fichier introuvable"
         except Exception as exception:
             logging.warning(exception)
             return "Exception"

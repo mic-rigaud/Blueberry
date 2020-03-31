@@ -8,6 +8,7 @@ Subject: new station (VM-debian.lan) enp0s3
     ethernet address: 08:00:27:0a:34:f0
      ethernet vendor: PCS Systemtechnik GmbH
            timestamp: Tuesday, March 31, 2020 10:08:11 +0200
+---
 From: arpwatch (Arpwatch Blueberry)
 To: root
 Subject: new station (mic-rigaud.fr) enp0s3
@@ -18,6 +19,8 @@ Subject: new station (mic-rigaud.fr) enp0s3
     ethernet address: b8:27:eb:50:8f:9c
      ethernet vendor: Raspberry Pi Foundation
            timestamp: Tuesday, March 31, 2020 10:08:11 +0200
+
+---
 From: arpwatch (Arpwatch Blueberry)
 To: root
 Subject: new station (192.168.1.1) enp0s3
@@ -28,6 +31,7 @@ Subject: new station (192.168.1.1) enp0s3
     ethernet address: e4:5d:51:ee:26:a8
      ethernet vendor: SFR
            timestamp: Tuesday, March 31, 2020 10:08:21 +0200
+---
 From: arpwatch (Arpwatch Blueberry)
 To: root
 Subject: new station (192.168.1.7) enp0s3
@@ -38,4 +42,4 @@ Subject: new station (192.168.1.7) enp0s3
     ethernet address: 74:70:fd:5b:0c:70
      ethernet vendor: Intel Corporate
            timestamp: Tuesday, March 31, 2020 10:10:51 +0200
-
+---
