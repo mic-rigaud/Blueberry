@@ -29,7 +29,7 @@ freq_nids = 1
 suricata_log = '/home/blueberry/src/test/data/suricata-log.json'
 
 # Logwatch report
-logwatch_report = "./test/report-test"
+logwatch_report = "/home/blueberry/src/test/data/report-test"
 
 # Arpwatch mail report
-arpwatch_mail = "./test/arpwatch-test"
+arpwatch_mail = "/home/blueberry/src/test/data/arpwatch-test"
