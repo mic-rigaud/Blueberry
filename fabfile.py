@@ -54,6 +54,7 @@ def install():
     config_service()
     config_bdd()
     local("mkdir log")
+    local("touch log/blueberry.log")
     # config_ossec()
     # config_zeek()
 
