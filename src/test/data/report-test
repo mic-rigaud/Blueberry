@@ -1,5 +1,5 @@
- 
- ################### Logwatch 7.4.3 (04/27/16) #################### 
+
+ ################### Logwatch 7.4.3 (04/27/16) ####################
         Processing Initiated: Mon Mar 30 09:09:39 2020
         Date Range Processed: today
                               ( 2020-Mar-30 )
@@ -7,84 +7,83 @@
         Detail Level of Output: 0
         Type of Output/Format: file / text
         Logfiles for Host: Blueberry
- ################################################################## 
- 
- --------------------- iptables firewall Begin ------------------------ 
+ ##################################################################
+
+ --------------------- iptables firewall Begin ------------------------
 
  Listed by source hosts:
  Logged 40 packets on interface enp0s3
-   From 172.16.255.254 - 20 packets to igmp(0) 
-   From 192.168.1.1 - 20 packets to igmp(0) 
- 
- ---------------------- iptables firewall End ------------------------- 
+   From 1.1.1.10 - 20 packets to igmp(0)
+   From 1.1.1.1 - 20 packets to igmp(0)
 
- 
- --------------------- pam_unix Begin ------------------------ 
+ ---------------------- iptables firewall End -------------------------
+
+
+ --------------------- pam_unix Begin ------------------------
 
  su:
     Sessions Opened:
-       pi -> root: 1 Time(s)
- 
+       test -> root: 1 Time(s)
+
  sudo:
     Sessions Opened:
-       pi -> root: 2 Time(s)
- 
- 
- ---------------------- pam_unix End ------------------------- 
+       test -> root: 2 Time(s)
 
- 
- --------------------- rsyslogd Begin ------------------------ 
+
+ ---------------------- pam_unix End -------------------------
+
+
+ --------------------- rsyslogd Begin ------------------------
 
  **** Unmatched entries ****
      imuxsock: Acquired UNIX socket '/run/systemd/journal/syslog' (fd 3) from systemd.  [v8.1901.0] : 4 Times
- 
- ---------------------- rsyslogd End ------------------------- 
 
- 
- --------------------- Connections (secure-log) Begin ------------------------ 
+ ---------------------- rsyslogd End -------------------------
 
- 
+
+ --------------------- Connections (secure-log) Begin ------------------------
+
+
  **Unmatched Entries**
     su: (to root) root on pts/0: 1 Time(s)
     systemd-logind: New session c1 of user root.: 1 Time(s)
- 
- ---------------------- Connections (secure-log) End ------------------------- 
 
- 
- --------------------- SSHD Begin ------------------------ 
+ ---------------------- Connections (secure-log) End -------------------------
 
- 
+
+ --------------------- SSHD Begin ------------------------
+
+
  SSHD Started: 4 Times
- 
+
  Users logging in through sshd:
-    pi:
-       192.168.1.76 (michael-NUC.lan): 1 Time
- 
+    test:
+       1.1.1.10 (debian): 1 Time
+
  **Unmatched Entries**
- Accepted key RSA SHA256:2+mWbtPZ2vpgIobESm9M8Fe7+H0xQh3aHJAWNtz9r/c found at /home/pi/.ssh/authorized_keys:1 : 2 Times
- 
- ---------------------- SSHD End ------------------------- 
+ Accepted key RSA SHA256:xxxxxxx/c found at /home/test/.ssh/authorized_keys:1 : 2 Times
 
- 
- --------------------- Sudo (secure-log) Begin ------------------------ 
+ ---------------------- SSHD End -------------------------
 
- 
- pi => root
+
+ --------------------- Sudo (secure-log) Begin ------------------------
+
+
+ test => root
  ----------
  /usr/bin/su                    -   1 Time(s).
  /usr/sbin/arpwatch             -   1 Time(s).
- 
- ---------------------- Sudo (secure-log) End ------------------------- 
 
- 
- --------------------- Disk Space Begin ------------------------ 
+ ---------------------- Sudo (secure-log) End -------------------------
+
+
+ --------------------- Disk Space Begin ------------------------
 
  Filesystem      Size  Used Avail Use% Mounted on
  /dev/sda1       3.9G  1.9G  1.9G  51% /
- 
- 
- ---------------------- Disk Space End ------------------------- 
 
- 
- ###################### Logwatch End ######################### 
 
+ ---------------------- Disk Space End -------------------------
+
+
+ ###################### Logwatch End #########################

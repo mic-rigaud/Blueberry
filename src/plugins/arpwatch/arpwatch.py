@@ -1,9 +1,10 @@
 # @Author: michael
-# @Date:   30-Mar-2020
-# @Filename: watchlog.py
+# @Date:   31-Mar-2020
+# @Filename: arpwatch.py
 # @Last modified by:   michael
-# @Last modified time: 30-Mar-2020
+# @Last modified time: 31-Mar-2020
 # @License: GNU GPL v3
+
 
 """Affiche la base arpwatch et alerte lors d'une nouvelle entrée."""
 
@@ -50,18 +51,40 @@ def arpwatch_liste():
     try:
         reponse = ""
         with open(cfg.arpwatch_mail, 'r') as file:
-            for line in file:
-                if line != "\n" and line != " \n":
-                    if "End" in line:
-                        reponse += "\n"
-                    else:
-                        reponse += line
-        if reponse == "" or reponse == "\n":
-            return "Pas de log pour le moment"
-        reponse = reponse.replace("###", "#")
-        return reponse
-    except:
+            contenu = parse(file.readlines())
+            for id in contenu:
+                element = contenu[id]
+                reponse += "{}  {}  {}\n".format(element["hostname"], element["ip"],
+                                                 element["timestamp"])
+            reponse = reponse.replace("<", "").replace(">", "")
+            return reponse
+    except Exception as exception:
+        logging.warning(exception)
         return "Probleme avec les logs"
+
+
+def parse(lines):
+    retour = {}
+    i = -1
+    for line in lines:
+        if line == "---\n":
+            i += 1
+            retour[i] = {"hostname": "",
+                         "ip": "",
+                         "vendor": "",
+                         "timestamp": "",
+                         "mac": ""}
+        elif "hostname" in line:
+            retour[i]["hostname"] = line.split(': ')[1].replace('\n', '')
+        elif "ip address" in line:
+            retour[i]["ip"] = line.split(': ')[1].replace('\n', '')
+        elif "ethernet vendor" in line:
+            retour[i]["vendor"] = line.split(': ')[1].replace('\n', '')
+        elif "timestamp" in line:
+            retour[i]["timestamp"] = line.split(': ')[1].replace('\n', '')
+        elif "ethernet address" in line:
+            retour[i]["mac"] = line.split(': ')[1].replace('\n', '')
+    return retour
 
 ###############################################################################
 
@@ -89,7 +112,7 @@ def button_liste(update: Update, context: CallbackContext):
 def button_job(update: Update, context: CallbackContext):
     query = update.callback_query
     reply_markup = creer_bouton()
-    reponse = get_info_veille(context.job_queue)
+    reponse = "Ne fonctionne pas pour le moment"  # get_info_veille(context.job_queue)
     context.bot.edit_message_text(chat_id=query.message.chat_id,
                                   message_id=query.message.message_id,
                                   text=reponse,
@@ -99,9 +122,9 @@ def button_job(update: Update, context: CallbackContext):
 
 @restricted
 def arpwatch(update: Update, context: CallbackContext):
-    """Gere les log."""
-    reponse = "Pas encore implémenté"
-    reply_markup = None  # creer_bouton()
+    """Affiche la base arpwatch et alerte lors d'une nouvelle entrée."""
+    reponse = "Que puis-je faire pour vous?"
+    reply_markup = creer_bouton()
     context.bot.send_message(chat_id=update.message.chat_id,
                              text=reponse,
                              parse_mode=telegram.ParseMode.HTML,
