@@ -19,7 +19,7 @@ user = [00000]
 
 # Log
 log = "/builds/mic-rigaud/blueberry/log/blueberry.log"
-dir = "/builds/mic-rigaud/blueberry"
+work_dir = "/builds/mic-rigaud/blueberry"
 
 # hosts
 hosts = ['00.00.00.00']
