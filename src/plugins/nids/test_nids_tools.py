@@ -6,7 +6,6 @@
 # @License: GNU GPL v3
 
 import config as cfg
-import pytest
 
 from plugins.nids.nids_tools import NidsTools
 
@@ -19,10 +18,10 @@ def test_get_last_log():
 
     # Tests négatifs
     logs = NidsTools("fichier introuvable").get_last_log(3600)
-    assert logs == "Fichier introuvable"
+    assert "[ERROR] Fichier" in logs
 
     logs = NidsTools(cfg.suricata_log).get_last_log("toto")
-    assert logs == "Exception"
+    assert "[ERROR] Exception" in logs
 
     logs = NidsTools(cfg.suricata_log).get_last_log(0)
     assert isinstance(logs, list)

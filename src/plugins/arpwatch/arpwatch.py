@@ -52,15 +52,21 @@ def arpwatch_liste():
         reponse = ""
         with open(cfg.arpwatch_mail, 'r') as file:
             contenu = parse(file.readlines())
-            for id in contenu:
-                element = contenu[id]
+            for i in contenu:
+                element = contenu[i]
                 reponse += "{}  {}  {}\n".format(element["hostname"], element["ip"],
                                                  element["timestamp"])
             reponse = reponse.replace("<", "").replace(">", "")
             return reponse
+    except PermissionError:
+        logging.error("Permission Error")
+        return "[ERROR] Vous n'avez pas les droits sur le fichier " + cfg.arpwatch_mail
+    except FileNotFoundError as exception:
+        logging.error(exception)
+        return "[ERROR] Fichier {} introuvable - Etes vous sur que arpwatch fonctionne? Reesayez dans quelques secondes.".format(cfg.arpwatch_mail)
     except Exception as exception:
         logging.warning(exception)
-        return "Probleme avec les logs"
+        return "[ERROR] Exception - " + str(exception)
 
 
 def parse(lines):

@@ -6,8 +6,8 @@
 # @License: GNU GPL v3
 
 
-import config as cfg
-import pytest
+# import config as cfg
+# import pytest
 
 from plugins.logwatch.logwatch import logwatch_liste
 

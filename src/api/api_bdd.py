@@ -12,7 +12,7 @@ import config as cfg
 from peewee import BooleanField, CharField, DateTimeField, Model
 from playhouse.sqlite_ext import SqliteDatabase
 
-db = SqliteDatabase(cfg.dir + 'network.db')
+db = SqliteDatabase(cfg.work_dir + 'network.db')
 
 
 class BaseModel(Model):

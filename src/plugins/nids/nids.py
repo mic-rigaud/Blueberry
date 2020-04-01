@@ -55,8 +55,8 @@ def nids_alert():
     evenements = NidsTools(cfg.suricata_log).get_last_log(cfg.freq_nids)
     if evenements == []:
         return ["Il n'y a pas d'évènements"]
-    if evenements == "PermissionError" or evenements == "Exception" or evenements == "Fichier introuvable":
-        return ["Il y a le problème suivant: " + str(evenements)]
+    if "[ERROR]" in evenements:
+        return ["Il y a le problème suivant:\n " + str(evenements)]
     for event in evenements:
         if event["event_type"] == "alert":
             message_test = str(event).replace(' ', '').replace('\n', '')

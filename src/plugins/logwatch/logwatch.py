@@ -60,8 +60,15 @@ def logwatch_liste():
             return "Pas de log pour le moment"
         reponse = reponse.replace("###", "#")
         return reponse
-    except:
-        return "Probleme avec les logs"
+    except PermissionError:
+        logging.error("Permission Error")
+        return "[ERROR] Vous n'avez pas les droits sur le fichier " + cfg.logwatch_report
+    except FileNotFoundError as exception:
+        logging.error(exception)
+        return "[ERROR] Fichier {} introuvable - il est possible que le fichier ne soit pas encore créé. Reessayez demain.".format(cfg.logwatch_report)
+    except Exception as exception:
+        logging.warning(exception)
+        return "[ERROR] Exception - " + str(exception)
 
 ###############################################################################
 

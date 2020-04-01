@@ -69,7 +69,7 @@ def copy_config():
 def config_service():
     """Configure le service Blueberry."""
     local(
-        "sed -e \"s/{{{{dir}}}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(cfg.dir.replace("/", "\/")))
+        "sed -e \"s/{{{{dir}}}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(cfg.work_dir.replace("/", "\/")))
     local("chown root: /etc/systemd/system/blueberry.service")
     # Permet d'éviter de planter dans les runner Gitlab-CI
     with settings(warn_only=True):

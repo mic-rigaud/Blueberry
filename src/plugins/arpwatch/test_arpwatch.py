@@ -26,5 +26,5 @@ def test_parse():
 def test_arpwatch():
     # Tests positifs
     result = arpwatch_liste()
-    assert result != "Probleme avec les logs"
+    assert "[ERROR]" not in result
     assert result != ""
