@@ -22,8 +22,8 @@ class NidsTools():
     def get_last_log(self, intervalle):
         """Permet de recuperer les derniers logs."""
         try:
-            offset = timezone(timedelta(hours=2))
-            date_last_veille = datetime.now(offset) - timedelta(seconds=intervalle)
+            offset_fr = timezone(timedelta(hours=2))
+            date_last_veille = datetime.now(offset_fr) - timedelta(seconds=intervalle)
             logs_a_traiter = []
             with open(self.log, 'r') as file:
                 for line in file:
@@ -36,7 +36,7 @@ class NidsTools():
             logging.error("Permission Error")
             return "PermissionError"
         except FileNotFoundError as exception:
-            logging.warning(exception)
+            logging.error(exception)
             return "Fichier introuvable"
         except Exception as exception:
             logging.warning(exception)

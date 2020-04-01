@@ -10,8 +10,6 @@ import pytest
 
 from plugins.nids.nids_tools import NidsTools
 
-LOG = "./test/data/suricata-log.json"
-
 
 def test_get_last_log():
     # Tests positifs
