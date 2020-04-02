@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: main.py
 # @Last modified by:   michael
-# @Last modified time: 31-Dec-2019
+# @Last modified time: 02-Apr-2020
 # @License: GNU GPL v3
 
 
@@ -26,7 +26,7 @@ sys.path.append(os.getcwd())
 logging.basicConfig(
     filename=cfg.log,
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(funcName)s - %(message)s')
+    format='%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s')
 
 HELP_LIST = []
 
@@ -70,7 +70,6 @@ def charge_plugins(dispatcher):
     dispatcher.add_handler(help_handler)
     unknown_handler = MessageHandler(Filters.command, unknown)
     dispatcher.add_handler(unknown_handler)
-    dispatcher.add_handler(CallbackQueryHandler(button, pass_job_queue=True))
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 # @Project: Major_Home
 # @Filename: nids.py
 # @Last modified by:   michael
-# @Last modified time: 31-Dec-2019
+# @Last modified time: 02-Apr-2020
 # @License: GNU GPL v3
 
 """Envoie les alarmes NIDS"""
@@ -18,6 +18,7 @@ from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from api.button import build_menu
 from api.Restricted import restricted
+from api.send_alert import send_alert
 from plugins.nids.nids_tools import NidsTools
 
 
@@ -26,15 +27,14 @@ def job_veille(context):
     messages = nids_alert()
     if "Il n'y a pas" not in messages[0]:
         for message in messages:
-            context.bot.send_message(chat_id=245779512,
-                                     text=message)
+            send_alert(context, message)
 
 
 def start_veille(job_queue):
     """Lance la veille."""
     job_queue.run_repeating(job_veille,
                             cfg.freq_nids,
-                            first=datetime.now(),
+                            first=5,
                             name="veille_nids")
     logging.info("Veille lancé")
     return "Veille Lancé"
@@ -80,11 +80,18 @@ def creer_bouton():
 
 def button_alert(update: Update, context: CallbackContext):
     query = update.callback_query
+    context.bot.edit_message_text(chat_id=query.message.chat_id,
+                                  message_id=query.message.message_id,
+                                  text="Recherche en cours.\n<i>Attention cela peut mettre un certain temps.</i>",
+                                  parse_mode=telegram.ParseMode.HTML)
     messages = nids_alert()
     for message in messages:
         context.bot.send_message(chat_id=query.message.chat_id,
                                  text=message,
                                  parse_mode=telegram.ParseMode.HTML)
+    context.bot.send_message(chat_id=query.message.chat_id,
+                             text="Recherche terminé.",
+                             parse_mode=telegram.ParseMode.HTML)
 
 
 def button_job(update: Update, context: CallbackContext):

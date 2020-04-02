@@ -2,7 +2,7 @@
 # @Date:   30-Mar-2020
 # @Filename: watchlog.py
 # @Last modified by:   michael
-# @Last modified time: 30-Mar-2020
+# @Last modified time: 02-Apr-2020
 # @License: GNU GPL v3
 
 """Affiche les logs en utilisant logwatch."""
@@ -17,20 +17,22 @@ from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from api.button import build_menu
 from api.Restricted import restricted
+from api.send_alert import send_alert
 
 
 def job_veille(context):
     """Affiche les alarmes."""
     logs = logwatch_liste()
-    context.bot.send_message(chat_id=245779512,
-                             text=logs)
+    send_alert(context, logs)
 
 
 def start_veille(job_queue):
     """Lance la veille."""
-    heure = datetime.time(7, 00)
+    heures = int(cfg.freq_logwatch.split("h")[0])
+    minutes = int(cfg.freq_logwatch.split("h")[1])
+    datetime_heure = datetime.time(heures, minutes)
     job_queue.run_daily(job_veille,
-                        heure,
+                        datetime_heure,
                         name="veille_logwatch")
     logging.info("Veille lancé")
     return "Veille Lancé"

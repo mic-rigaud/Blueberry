@@ -28,7 +28,8 @@ class Ip(BaseModel):
     """Objet definissant une IP pour la BDD."""
 
     ip = CharField()
-    host = CharField()
+    mac = CharField()
+    hostname = CharField()
     time_first = DateTimeField(default=datetime.datetime.now)
     time_last = DateTimeField(default=datetime.datetime.now)
     confiance = BooleanField(default=False)

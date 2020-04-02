@@ -9,7 +9,8 @@
 import config as cfg
 import pytest
 
-from plugins.arpwatch.arpwatch import arpwatch_liste, parse
+from plugins.arpwatch.arpwatch import arpwatch_liste, arpwatch_read, parse
+from plugins.arpwatch.ArpWatchError import ArpWatchError
 
 
 def test_parse():
@@ -23,8 +24,22 @@ def test_parse():
     assert result[0]["mac"] == "00:00:00:00:11:11"
 
 
-def test_arpwatch():
+def test_arpwatch_liste():
     # Tests positifs
     result = arpwatch_liste()
     assert "[ERROR]" not in result
     assert result != ""
+
+
+def test_arpwatch_read():
+    # Test ok
+    result = arpwatch_read()
+    assert result[0]["hostname"] == "debian"
+
+    # Test file introuvable
+    arpwatch_mail = cfg.arpwatch_mail
+    cfg.arpwatch_mail = "Fichier introuvable"
+    with pytest.raises(ArpWatchError) as exception:
+        result = arpwatch_read()
+    assert "[ERROR] Fichier" in str(exception)
+    cfg.arpwatch_mail = arpwatch_mail

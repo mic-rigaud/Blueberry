@@ -9,23 +9,30 @@
 # Il faut completer ce fichier puis le renommer config.py
 
 
-# Token du Bot Telegram
+# Tokens du Bot Telegram
 bot_token = "fffff"
-ossec_token = "000"
-chat_id = "0000"
 
 # Utilisateurs
+# Liste des utilisateurs qui seront autorisés à utiliser votre bot.
+# Correspond également aux utilisateurs qui recevront les alertes.
+# Les autres personnes seront refoulés par le bot.
 user = [00000]
 
 # Log
+# Position du fichier de Log
 log = "/builds/mic-rigaud/blueberry/log/blueberry.log"
+# Espace ou est installé blueberry
+# Cette variable ne sert que pour l'installation pour construire le fichier
+# blueberry.service
 work_dir = "/builds/mic-rigaud/blueberry"
 
-# hosts
+# Ces variables ne sont utilisés que pour le développement.
+# Ne pas les commenter pour que le fabfile fonctionne.
 hosts = ['00.00.00.00']
+hosts_dir = "/home/blueberry/blueberry"
 
+# Les différents fichier ou sont installés les résultats des services suivant:
 # nids
-freq_nids = 1
 suricata_log = './test/data/suricata-log.json'
 
 # Logwatch report
@@ -33,3 +40,20 @@ logwatch_report = "./test/data/report-test"
 
 # Arpwatch mail report
 arpwatch_mail = "./test/data/arpwatch-test"
+
+# Blueberry ne fait que regarder régulièrement les fichiers définis précédemment
+# Les fréquences ci-dessous définissent les fréquences de scan et d'alerting
+# Plus les fréquences sont élevés plus l'application va charger le système
+# Fréquence d'alerting de suricata en secondes
+freq_nids = 3600
+
+# La fréquence d'alerting pour arpwatch est journalière.
+# En effet, il a été décidé que sur un réseau local l'ajout d'une machine n'est pas
+# critique et par conséquent un compte rendu journalier est suffisant.
+# Cette variable défini l'heure du compte rendu
+freq_arpwatch = "18h00"
+
+# La fréquence d'alerting pour logwatch est journalière.
+# En effet, logwatch ne peut faire au mieux que des rapport journalier
+# Cette variable défini l'heure du compte rendu
+freq_logwatch = "18h00"

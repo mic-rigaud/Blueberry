@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: fabfile.py
 # @Last modified by:   michael
-# @Last modified time: 15-Mar-2020
+# @Last modified time: 02-Apr-2020
 # @License: GNU GPL v3
 
 from __future__ import with_statement
@@ -55,15 +55,12 @@ def install():
     config_bdd()
     local("mkdir log")
     local("touch log/blueberry.log")
-    # config_ossec()
-    # config_zeek()
 
 
 def copy_config():
     """Copy le fichier de config a cote du main."""
     # TODO: Test que le fichier de config est propre
     local("cp config.py src/config.py")
-    #local("cp config.py blueberrycore/config.py")
 
 
 def config_service():
@@ -74,24 +71,6 @@ def config_service():
     # Permet d'éviter de planter dans les runner Gitlab-CI
     with settings(warn_only=True):
         result = local("systemctl enable blueberry.service")
-
-
-# def config_ossec():
-#     """Install Bluebrry for Ossec."""
-#     # TODO: Verifier que ossec est bien présent
-#     local("cp install/sendEvent.sh /var/ossec/active-response/bin/")
-#     local(
-#         "sed -i \"s/{{token}}/{}/g\" /var/ossec/active-response/bin/sendEvent.sh".format(cfg.ossec_token))
-#     local(
-#         "sed -i \"s/{{chat_id}}/{}/g\" /var/ossec/active-response/bin/sendEvent.sh".format(cfg.chat_id))
-#     local("chown root:ossec /var/ossec/active-response/bin/sendEvent.sh")
-#     local("chmod 750 /var/ossec/active-response/bin/sendEvent.sh")
-#     # TODO: rajouter la partie command dans ossec.conf
-#     local("systemctl restart ossec")
-#
-#
-# def config_zeek():
-#     pass
 
 
 def config_bdd():
