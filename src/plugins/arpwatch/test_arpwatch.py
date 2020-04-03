@@ -2,7 +2,7 @@
 # @Date:   31-Mar-2020
 # @Filename: test_arpwatch.py
 # @Last modified by:   michael
-# @Last modified time: 31-Mar-2020
+# @Last modified time: 03-Apr-2020
 # @License: GNU GPL v3
 
 
@@ -34,7 +34,7 @@ def test_arpwatch_liste():
 def test_arpwatch_read():
     # Test ok
     result = arpwatch_read()
-    assert result[0]["hostname"] == "debian"
+    assert result[1]["hostname"] == "debian"
 
     # Test file introuvable
     arpwatch_mail = cfg.arpwatch_mail

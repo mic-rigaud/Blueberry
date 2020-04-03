@@ -2,7 +2,7 @@
 # @Date:   31-Mar-2020
 # @Filename: arpwatch.py
 # @Last modified by:   michael
-# @Last modified time: 02-Apr-2020
+# @Last modified time: 03-Apr-2020
 # @License: GNU GPL v3
 
 
@@ -29,13 +29,18 @@ def job_veille(context):
         elements = arpwatch_read()
         for i in elements:
             element = elements[i]
-            if add_element(element):
-                message = "Un nouvel appareil repéré sur le réseau:\n" + \
-                    "{}  {}  {}\n".format(element["hostname"], element["ip"],
-                                          element["timestamp"])
-                send_alert(context, message)
+            if not isempty(element):
+                if add_element(element):
+                    message = "Un nouvel appareil repéré sur le réseau:\n" + \
+                        "{}  {}  {}\n".format(element["hostname"], element["ip"],
+                                              element["timestamp"])
+                    send_alert(context, message)
     except ArpWatchError as exception:
         send_alert(context, str(exception))
+
+
+def isempty(element):
+    return element["hostname"] == "" and element["ip"] == "" and element["timestamp"] == ""
 
 
 def start_veille(job_queue):
@@ -138,21 +143,21 @@ def add_element(element):
 def creer_bouton():
     """Creer la liste de boutons."""
     button_list = [
-        InlineKeyboardButton("afficher", callback_data="arpwatch_liste"),
-        InlineKeyboardButton("etat job", callback_data="arpwatch_job"),
+        InlineKeyboardButton("Rechercher une alerte manuellement", callback_data="arpwatch_alert"),
+        InlineKeyboardButton("Etat du job d'alerting", callback_data="arpwatch_job"),
         ]
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=2))
 
 
-def button_liste(update: Update, context: CallbackContext):
+def button_alert(update: Update, context: CallbackContext):
     query = update.callback_query
-    reply_markup = creer_bouton()
-    reponse = arpwatch_liste()
-    context.bot.edit_message_text(chat_id=query.message.chat_id,
-                                  message_id=query.message.message_id,
-                                  text=reponse,
-                                  parse_mode=telegram.ParseMode.HTML,
-                                  reply_markup=reply_markup)
+    reply_markup = None
+    job_veille(context)
+    reponse = "La recherche a été effectué avec succes."
+    context.bot.send_message(chat_id=query.message.chat_id,
+                             text=reponse,
+                             parse_mode=telegram.ParseMode.HTML,
+                             reply_markup=reply_markup)
 
 
 def button_job(update: Update, context: CallbackContext):
@@ -169,7 +174,7 @@ def button_job(update: Update, context: CallbackContext):
 @restricted
 def arpwatch(update: Update, context: CallbackContext):
     """Affiche la base arpwatch et alerte lors d'une nouvelle entrée."""
-    reponse = "Que puis-je faire pour vous?"
+    reponse = arpwatch_liste()
     reply_markup = creer_bouton()
     context.bot.send_message(chat_id=update.message.chat_id,
                              text=reponse,
@@ -183,5 +188,5 @@ def add(dispatcher):
     """
     dispatcher.add_handler(CommandHandler('arpwatch', arpwatch, pass_args=True))
     dispatcher.add_handler(CallbackQueryHandler(button_job, pattern="^arpwatch_job$"))
-    dispatcher.add_handler(CallbackQueryHandler(button_liste, pattern="^arpwatch_liste$"))
+    dispatcher.add_handler(CallbackQueryHandler(button_alert, pattern="^arpwatch_alert$"))
     start_veille(dispatcher.job_queue)
