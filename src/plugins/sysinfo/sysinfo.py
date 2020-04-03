@@ -2,7 +2,7 @@
 # @Date:   11-Jan-2020
 # @Filename: sysinfo.py
 # @Last modified by:   michael
-# @Last modified time: 11-Jan-2020
+# @Last modified time: 03-Apr-2020
 # @License: GNU GPL v3
 
 
@@ -16,11 +16,11 @@ from telegram.ext import CallbackContext, CommandHandler
 from api.Restricted import restricted
 
 
-def status_suricata():
+def status_service(service):
     """Retourne le status de suricata."""
     reponse = "☠️"
     for proc in psutil.process_iter(attrs=['pid', 'name', 'status']):
-        if "suricata" in proc.info["name"].lower():
+        if service in proc.info["name"].lower():
             reponse = "✅"
     return reponse
 
@@ -48,7 +48,8 @@ def status_str():
     reponse += "<b>Temperature:</b> " + temperature_raspberry() + "°C\n"
     reponse += "<b>CPU:</b> " + status_ram() + "%\n"
     reponse += "<b>RAM:</b> " + status_cpu() + "%\n"
-    reponse += "<b>Suricata:</b> " + status_suricata() + "\n"
+    reponse += "<b>Suricata:</b> " + status_service("suricata") + "\n"
+    reponse += "<b>Arpwatch:</b> " + status_service("arpwatch") + "\n"
     return reponse
 
 
