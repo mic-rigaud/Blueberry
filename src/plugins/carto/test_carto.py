@@ -21,7 +21,7 @@ def test_traceroute(caplog):
     # Test negatif
     route = traceroute("route_inconnu")
     for record in caplog.records:
-        assert "route_inconnu: Nom ou service inconnu" in record.message
+        assert "route_inconnu:" in record.message
 
 
 def test_get_ip_voisin():

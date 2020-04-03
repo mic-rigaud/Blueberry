@@ -24,13 +24,17 @@ from api.send_alert import send_alert
 
 
 def get_myip():
-    process = Popen(['/bin/ip', 'a'], stdout=PIPE, stderr=PIPE, shell=False)  # nosec
-    stdout, stderr = process.communicate()
-    if stderr.decode('utf8') != '':
-        logging.warning(stderr.decode('utf8'))
-    ip = stdout.decode('utf8').split('192.168')[1].split('/')[0]
-    ip = "192.168" + ip
-    return ip
+    try:
+        process = Popen(['/bin/ip', 'a'], stdout=PIPE, stderr=PIPE, shell=False)  # nosec
+        stdout, stderr = process.communicate()
+        if stderr.decode('utf8') != '':
+            logging.warning(stderr.decode('utf8'))
+        ip = stdout.decode('utf8').split('192.168')[1].split('/')[0]
+        ip = "192.168" + ip
+        return ip
+    except IndexError:
+        logging.error("Erreur avec la commande ip. Etes vous sur d'être connecté au réseau?")
+        return "0.0.0.0"
 
 
 def traceroute(ip):
