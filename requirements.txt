@@ -13,6 +13,7 @@ decorator==4.4.2
 Fabric3==1.14.post1
 future==0.18.2
 gpiozero==1.5.1
+graphviz==0.13.2
 importlib-metadata==1.5.0
 more-itertools==8.2.0
 packaging==20.3

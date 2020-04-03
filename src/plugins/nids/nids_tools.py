@@ -32,7 +32,6 @@ class NidsTools():
                     date = datetime.strptime(log["timestamp"], "%Y-%m-%dT%H:%M:%S.%f%z")
                     if date > date_last_veille:
                         logs_a_traiter.append(log)
-            print(logs_a_traiter)
             return logs_a_traiter
         except PermissionError:
             logging.error("Permission Error")

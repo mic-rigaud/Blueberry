@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: api_bdd.py
 # @Last modified by:   michael
-# @Last modified time: 16-Aug-2019
+# @Last modified time: 03-Apr-2020
 # @License: GNU GPL v3
 
 import datetime
@@ -34,6 +34,7 @@ class Ip(BaseModel):
     time_last = DateTimeField(default=datetime.datetime.now)
     confiance = BooleanField(default=False)
     status = BooleanField(default=True)
+    ip_voisin = CharField(default="")
 
 
 # class Parametres(BaseModel):
