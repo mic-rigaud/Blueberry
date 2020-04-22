@@ -3,7 +3,7 @@
 # @Project: Major_Home
 # @Filename: nids.py
 # @Last modified by:   michael
-# @Last modified time: 16-Apr-2020
+# @Last modified time: 22-Apr-2020
 # @License: GNU GPL v3
 
 """Envoie les alarmes NIDS"""
@@ -59,8 +59,8 @@ def nids_alert():
         return ["Il y a le problème suivant:\n " + str(evenements)]
     for event in evenements:
         if event["event_type"] == "alert":
-            if event["alert"]["category"] != "NotSuspiciousTraffic":
-                message_test = str(event).replace(' ', '').replace('\n', '')
+            if event["alert"]["category"] != "Not Suspicious Traffic":
+                message_test = str(event).replace('\n', '')  # .replace(' ', '')
                 if message_test != "":
                     message.append(message_test)
     if message == []:
