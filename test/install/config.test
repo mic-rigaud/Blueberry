@@ -57,3 +57,6 @@ freq_arpwatch = "18h00"
 # En effet, logwatch ne peut faire au mieux que des rapport journalier
 # Cette variable défini l'heure du compte rendu
 freq_logwatch = "18h00"
+
+# Virustotal api Key
+virustotal_key = "000"
