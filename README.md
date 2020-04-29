@@ -22,6 +22,7 @@ Cet outil permet superviser via Telegram un ensemble d'autre outils de sécurit�
 | `\arpwatch` | Permet de lister les machines vu par [arpwatch](https://linux.die.net/man/8/arpwatch) et alerte si une nouvelle machine apparaît. L'alerte est remonté une fois par jours à une heure configurable. |
 | `\carto` | Renvoi une cartographie du réseau sous la forme d'un mind map. Attention, cette fonction prend pour hypothèse que votre réseau commence en '192.168' et qu'il n'y a qu'un chemin réseau pour atteindre une machine. Cette cartographie ne fonctionne plus sur des réseaux complexes.|
 | `\virustotal` | Permet de scanner une url via l'api de [virustotal](https://www.virustotal.com/) |
+| `\whois` | Permet de faire un whois sur une adresse ip/url/domaine. Les informations sont récupérées sur  [whois xml API](https://www.whoisxmlapi.com) |
 | `\help` | Affiche l'aide. |
 
 

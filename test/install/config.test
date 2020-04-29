@@ -59,4 +59,11 @@ freq_arpwatch = "18h00"
 freq_logwatch = "18h00"
 
 # Virustotal api Key
-virustotal_key = "000"
+# Stay at "0" if not use
+virustotal_key = "0"
+
+# https://whois.whoisxmlapi.com/
+# Subscribe to get Key.
+# 500 req per month for free
+# Stay at "0" if not use
+whois_key = "0"
