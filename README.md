@@ -23,6 +23,7 @@ Cet outil permet superviser via Telegram un ensemble d'autre outils de sécurit�
 | `\carto` | Renvoi une cartographie du réseau sous la forme d'un mind map. Attention, cette fonction prend pour hypothèse que votre réseau commence en '192.168' et qu'il n'y a qu'un chemin réseau pour atteindre une machine. Cette cartographie ne fonctionne plus sur des réseaux complexes.|
 | `\virustotal` | Permet de scanner une url via l'api de [virustotal](https://www.virustotal.com/) |
 | `\whois` | Permet de faire un whois sur une adresse ip/url/domaine. Les informations sont récupérées sur  [whois xml API](https://www.whoisxmlapi.com) |
+| `\observatory` | Permet d'évaluer une nom de domaine au niveau `http` et `tls` avec les outils de [Mozilla](https://observatory.mozilla.org/) |
 | `\help` | Affiche l'aide. |
 
 
@@ -30,10 +31,10 @@ Cet outil permet superviser via Telegram un ensemble d'autre outils de sécurit�
 
 *Vous n'avez rien a faire si vous utilisez le script d'installation [Blueberry-Ansible](https://gitlab.com/mic-rigaud/blueberry-ansible)*
 
-Tout d'abord il faut copier config.py.exemple en config.py
+Tout d'abord il faut copier config.test en config.py
 
 ```
-cp config.py.exemple config.py
+cp test/install/config.test config.py
 ```
 
 Puis il faut compléter le fichier de configuration
@@ -46,7 +47,7 @@ Enfin:
 ```shell
 pip3 install -r requirements.txt
 fab install
-fab start_local
+systemctl start blueberry
 ```
 
 

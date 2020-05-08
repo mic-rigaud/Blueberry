@@ -2,7 +2,7 @@
 # @Date:   31-Dec-2019
 # @Filename: carto.py
 # @Last modified by:   michael
-# @Last modified time: 03-Apr-2020
+# @Last modified time: 08-May-2020
 # @License: GNU GPL v3
 
 
@@ -34,7 +34,7 @@ def get_myip():
         return ip
     except IndexError:
         logging.error("Erreur avec la commande ip. Etes vous sur d'être connecté au réseau?")
-        return "0.0.0.0"
+        return "1.1.1.1"
 
 
 def traceroute(ip):
