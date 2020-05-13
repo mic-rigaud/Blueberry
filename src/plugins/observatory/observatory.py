@@ -2,7 +2,7 @@
 # @Date:   08-May-2020
 # @Filename: observatory.py
 # @Last modified by:   michael
-# @Last modified time: 08-May-2020
+# @Last modified time: 11-May-2020
 # @License: GNU GPL v3
 
 
@@ -86,6 +86,8 @@ def get_scan_url(id):
 
 
 def get_analyse_url(url):
+    req = requests.post(ADRESSE_HTTP_ANALYZE + url)
+    time.sleep(1)
     req = requests.get(ADRESSE_HTTP_ANALYZE + url)
     analyse = json.loads((req.content).decode("utf-8"))
     return analyse

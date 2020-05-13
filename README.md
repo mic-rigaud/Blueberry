@@ -24,6 +24,7 @@ Cet outil permet superviser via Telegram un ensemble d'autre outils de sécurit�
 | `\virustotal` | Permet de scanner une url via l'api de [virustotal](https://www.virustotal.com/) |
 | `\whois` | Permet de faire un whois sur une adresse ip/url/domaine. Les informations sont récupérées sur  [whois xml API](https://www.whoisxmlapi.com) |
 | `\observatory` | Permet d'évaluer une nom de domaine au niveau `http` et `tls` avec les outils de [Mozilla](https://observatory.mozilla.org/) |
+| `\scan` | Lance un scan de l'URL ou Domain ou IP en utilisant les plugins installés par ailleurs |
 | `\help` | Affiche l'aide. |
 
 
