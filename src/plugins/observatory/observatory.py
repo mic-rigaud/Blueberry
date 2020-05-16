@@ -2,7 +2,7 @@
 # @Date:   08-May-2020
 # @Filename: observatory.py
 # @Last modified by:   michael
-# @Last modified time: 11-May-2020
+# @Last modified time: 14-May-2020
 # @License: GNU GPL v3
 
 
@@ -15,8 +15,7 @@ import time
 import config as cfg
 import psutil
 import requests
-import telegram
-from telegram import Update
+from telegram import ParseMode, Update
 from telegram.ext import CallbackContext, CommandHandler
 
 from api.Restricted import restricted
@@ -48,6 +47,7 @@ def print_scan(scan):
                 reponse += "• <b>{}</b> ({})\n{}\n".format(scan[element]["name"],
                                                            scan[element]["score_modifier"],
                                                            scan[element]["score_description"])
+        reponse += "<b><a href=\"https://infosec.mozilla.org/guidelines/web_security\">PLUS D'INFO</a></b>\n"
         return reponse
     except KeyError:
         logging.error("Result retournée par observatory erronée")
@@ -86,7 +86,7 @@ def get_scan_url(id):
 
 
 def get_analyse_url(url):
-    req = requests.post(ADRESSE_HTTP_ANALYZE + url)
+    req = requests.post(ADRESSE_HTTP_ANALYZE + url + "&hidden=true&rescan=true")
     time.sleep(1)
     req = requests.get(ADRESSE_HTTP_ANALYZE + url)
     analyse = json.loads((req.content).decode("utf-8"))
@@ -132,7 +132,8 @@ def observatory(update: Update, context: CallbackContext):
         reponse = "Faire \"/observatory <i>url</i>\" pour scanner une url"
     context.bot.send_message(chat_id=update.message.chat_id,
                              text=reponse,
-                             parse_mode=telegram.ParseMode.HTML)
+                             parse_mode=ParseMode.HTML,
+                             disable_web_page_preview=True)
 
 
 def add(dispatcher):

@@ -2,7 +2,7 @@
 # @Date:   10-May-2020
 # @Filename: scan.py
 # @Last modified by:   michael
-# @Last modified time: 13-May-2020
+# @Last modified time: 16-May-2020
 # @License: GNU GPL v3
 
 """Scan une url/domain/ip/mail via les plugins dédiés."""
@@ -19,6 +19,7 @@ from api.button import build_menu
 from api.Restricted import restricted
 from plugins.observatory.observatory import (get_http_observatory,
                                              get_tls_observatory)
+from plugins.telephone.telephone import get_analyse
 from plugins.virustotal.virustotal import get_analyse_url, virus_scan_url
 from plugins.whois.whois import get_whois
 
@@ -26,13 +27,17 @@ from plugins.whois.whois import get_whois
 def creer_bouton(demande):
     """Creer la liste de boutons."""
     button_list = []
-    re_ip = re.compile('[0-9]*\\.[0-9]*\\.[0-9]*\\.[0-9]*')
+    re_ip = re.compile('[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+')
+    re_tel = re.compile('[0-9]+')
     if re_ip.match(demande):
         button_list.append(
             InlineKeyboardButton("Whois", callback_data="scan_wi_" + demande))
     elif '@' in demande:
         button_list.append(
             InlineKeyboardButton("Virustotal", callback_data="scan_vt_" + demande))
+    elif re_tel.match(demande):
+        button_list.append(
+            InlineKeyboardButton("Telephone", callback_data="scan_tel_" + demande))
     else:
         button_list.append(
             InlineKeyboardButton("Analyse HTTP", callback_data="scan_ob_" + demande))
@@ -57,12 +62,15 @@ def button_action(update: Update, context: CallbackContext):
         id_virus = virus_scan_url(url)
         time.sleep(5)
         reponse = get_analyse_url(id_virus)
+    elif action == "tel":
+        reponse = get_analyse(url)
     else:
         reponse = "Pardon je n'ai pas compris la demande"
     context.bot.edit_message_text(chat_id=query.message.chat_id,
                                   message_id=query.message.message_id,
                                   text=reponse,
-                                  parse_mode=telegram.ParseMode.HTML)
+                                  parse_mode=telegram.ParseMode.HTML,
+                                  disable_web_page_preview=True)
     reply_markup = creer_bouton(url)
     reponse = "Souhaitez vous lancer une autre analyse?"
     context.bot.send_message(chat_id=query.message.chat_id,
@@ -92,6 +100,4 @@ def add(dispatcher):
     Scan une url/domain/ip/mail via les plugins dédiés.
     """
     dispatcher.add_handler(CommandHandler('scan', scan))
-    dispatcher.add_handler(CallbackQueryHandler(button_action, pattern="scan_wi_."))
-    dispatcher.add_handler(CallbackQueryHandler(button_action, pattern="scan_ob_."))
-    dispatcher.add_handler(CallbackQueryHandler(button_action, pattern="scan_vt_."))
+    dispatcher.add_handler(CallbackQueryHandler(button_action, pattern="scan_."))
