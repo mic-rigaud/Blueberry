@@ -3,13 +3,14 @@
 # @Project: Blueberry
 # @Filename: main.py
 # @Last modified by:   michael
-# @Last modified time: 02-Apr-2020
+# @Last modified time: 31-Jan-2021
 # @License: GNU GPL v3
 
 
 import logging
 import os
 import sys
+from multiprocessing import Process
 
 import config as cfg
 import telegram
@@ -18,6 +19,7 @@ from telegram.ext import (CallbackContext, CallbackQueryHandler,
                           CommandHandler, Filters, MessageHandler, Updater)
 
 from api.button import button
+from api.mq_pull import mqPull
 from api.Restricted import restricted
 
 sys.path.append(os.path.dirname(os.getcwd()))
@@ -78,7 +80,9 @@ if __name__ == "__main__":
     updater = Updater(token=cfg.bot_token, use_context=True)
     dispatcher = updater.dispatcher
     charge_plugins(dispatcher)
+    mq_pull = Process(target=mqPull, args=(updater,))
+    mq_pull.start()
     updater.start_polling()
     updater.idle()
-
+    mq_pull.terminate()
     logging.info("Extinction de Blueberry")

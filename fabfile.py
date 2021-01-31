@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: fabfile.py
 # @Last modified by:   michael
-# @Last modified time: 02-Apr-2020
+# @Last modified time: 06-Jan-2021
 # @License: GNU GPL v3
 
 from __future__ import with_statement
@@ -125,3 +125,10 @@ def start_local(args=""):
     """Demarre en local."""
     commande = "python3 src/main.py" + args
     local(commande)
+
+
+def start_server():
+    """Start le serveur."""
+    code_dir = cfg.hosts_dir
+    with cd(code_dir):
+        sudo('systemctl start blueberry')
