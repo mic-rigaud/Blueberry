@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: fabfile.py
 # @Last modified by:   michael
-# @Last modified time: 06-Jan-2021
+# @Last modified time: 06-Feb-2021
 # @License: GNU GPL v3
 
 from __future__ import with_statement
@@ -15,7 +15,8 @@ from fabric.api import abort, env, local, run, settings, sudo
 from fabric.context_managers import cd, lcd
 from fabric.contrib.console import confirm
 
-import src.api.api_bdd as bdd
+import src.api.BDD as bdd
+from src.plugins.carto.Ip import Ip
 
 env.hosts = cfg.hosts
 
