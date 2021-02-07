@@ -12,6 +12,8 @@ import config as cfg
 import zmq
 from telegram import ParseMode
 
+from src.plugins.arpwatch.arpwatch import arpwatch_mqalert
+
 
 def mqPull(updater):
     context = zmq.Context()
@@ -21,6 +23,8 @@ def mqPull(updater):
     while True:
         recv = receiver.recv()
         task, message = str(recv).split("+")
+        if task == "arpwatch":
+            arpwatch_mqalert(updater)
         message = message.replace("\\n", "\n")
         logging.info("Reception de l'alerte : " + message)
         for chat_id in cfg.user:

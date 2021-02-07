@@ -23,19 +23,6 @@ def creer_button_ip():
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
 
 
-def carto_creer_button_info(id, filtre):
-    button_list = []
-    button_list.append(InlineKeyboardButton(
-        "Ping", callback_data="carto_ping_{}_{}".format(id, filtre)))
-    button_list.append(InlineKeyboardButton(
-        "Scan", callback_data="carto_scan_{}_{}".format(id, filtre)))
-    button_list.append(InlineKeyboardButton(
-        "Supprimer", callback_data="carto_scan_{}_{}".format(id, filtre)))
-    button_list.append(InlineKeyboardButton(
-        "Retour", callback_data="carto_lister_{}".format(filtre)))
-    return InlineKeyboardMarkup(build_menu(button_list, n_cols=2))
-
-
 def carto_ping(id):
     ip = Ip.get(Ip.id == id)
     if ping(ip.ip) == 0:

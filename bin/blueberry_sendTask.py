@@ -21,5 +21,6 @@ parser.add_argument("-m", "--message", help="specify message", type=str)
 
 args = parser.parse_args()
 
-mq_message = bytes('{}+{}'.format(args.task, args.message), 'utf-8')
+message = args.message.replace("+", "-")
+mq_message = bytes('{}+{}'.format(args.task, message), 'utf-8')
 sender.send(mq_message)

@@ -25,6 +25,10 @@ from src.plugins.carto.Ip import Ip
 
 def job_veille(context):
     """Affiche les alarmes."""
+    arpwatch_mqalert(context)
+
+
+def arpwatch_mqalert(context):
     try:
         elements = arpwatch_read()
         for i in elements:
