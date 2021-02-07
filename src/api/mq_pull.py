@@ -33,3 +33,5 @@ def mqPull(updater):
                 updater.bot.send_message(chat_id=chat_id,
                                          text=str(message),
                                          parse_mode=ParseMode.HTML)
+        else:
+            logging.info("Erreur task inconnu : {}".format(str(task)))
