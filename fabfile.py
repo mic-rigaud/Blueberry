@@ -78,7 +78,7 @@ def config_bdd():
     """Permet l'installation de la BDD automatise."""
     try:
         bdd.db.connect
-        bdd.db.create_tables([bdd.Ip])
+        bdd.db.create_tables([Ip])
     except:
         print("=== La base SQL existe déjà ===")
 
