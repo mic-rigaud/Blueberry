@@ -18,9 +18,9 @@ from telegram import Update
 from telegram.ext import (CallbackContext, CallbackQueryHandler,
                           CommandHandler, Filters, MessageHandler, Updater)
 
-from api.button import button
-from api.mq_pull import mqPull
-from api.Restricted import restricted
+from src.api.button import button
+from src.api.mq_pull import mqPull
+from src.api.Restricted import restricted
 
 sys.path.append(os.path.dirname(os.getcwd()))
 sys.path.append(os.getcwd())
