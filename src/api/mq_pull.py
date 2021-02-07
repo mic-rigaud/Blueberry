@@ -24,10 +24,12 @@ def mqPull(updater):
         recv = receiver.recv()
         task, message = str(recv).split("+")
         if task == "arpwatch":
+            logging.info("Reception d'une alerte arpwatch")
             arpwatch_mqalert(updater)
-        message = message.replace("\\n", "\n")
-        logging.info("Reception de l'alerte : " + message)
-        for chat_id in cfg.user:
-            updater.bot.send_message(chat_id=chat_id,
-                                     text=str(message),
-                                     parse_mode=ParseMode.HTML)
+        elif task == "hids":
+            message = message.replace("\\n", "\n")
+            logging.info("Reception de l'alerte : " + message)
+            for chat_id in cfg.user:
+                updater.bot.send_message(chat_id=chat_id,
+                                         text=str(message),
+                                         parse_mode=ParseMode.HTML)
