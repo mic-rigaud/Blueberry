@@ -2,7 +2,7 @@
 # @Date:   01-Jan-1970
 # @Filename: blueberry_sendTask.py
 # @Last modified by:   michael
-# @Last modified time: 31-Jan-2021
+# @Last modified time: 07-Feb-2021
 # @License: GNU GPL v3
 
 import argparse
@@ -15,7 +15,7 @@ sender.connect("tcp://127.0.0.1:5555")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-t", "--task", help="specify task", type=str,
-                    choices=["hids", "nids"], required=True)
+                    choices=["hids", "nids", "arpwatch"], required=True)
 parser.add_argument("-m", "--message", help="specify message", type=str)
 
 
