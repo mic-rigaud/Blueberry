@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: main.py
 # @Last modified by:   michael
-# @Last modified time: 31-Jan-2021
+# @Last modified time: 07-Feb-2021
 # @License: GNU GPL v3
 
 
@@ -48,7 +48,7 @@ def help(update: Update, context: CallbackContext):
     reponse = "Blueberry possède les plugins suivants:\n\n"
     for mod in HELP_LIST:
         doc = mod.__doc__
-        nom = mod.__name__.replace("plugins.", "").split('.')[0]
+        nom = mod.__name__.replace("src.plugins.", "").split('.')[0]
         if doc:
             if demande == "":
                 reponse += "<b>" + nom + "</b> : " + doc + "\n"
@@ -65,7 +65,7 @@ def charge_plugins(dispatcher):
     lst_import = os.listdir("./src/plugins")
     for module_name in lst_import:
         if "_" not in module_name:
-            mod = __import__("plugins." + module_name + '.' + module_name, fromlist=[''])
+            mod = __import__("src.plugins." + module_name + '.' + module_name, fromlist=[''])
             mod.add(dispatcher)
             HELP_LIST.append(mod)
     help_handler = CommandHandler('help', help, pass_args=True)

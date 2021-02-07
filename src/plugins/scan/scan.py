@@ -2,7 +2,7 @@
 # @Date:   10-May-2020
 # @Filename: scan.py
 # @Last modified by:   michael
-# @Last modified time: 16-May-2020
+# @Last modified time: 07-Feb-2021
 # @License: GNU GPL v3
 
 """Scan une url/domain/ip/mail via les plugins dédiés."""
@@ -15,13 +15,13 @@ import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
-from api.button import build_menu
-from api.Restricted import restricted
-from plugins.observatory.observatory import (get_http_observatory,
-                                             get_tls_observatory)
-from plugins.telephone.telephone import get_analyse
-from plugins.virustotal.virustotal import get_analyse_url, virus_scan_url
-from plugins.whois.whois import get_whois
+from src.api.button import build_menu
+from src.api.Restricted import restricted
+from src.plugins.observatory.observatory import (get_http_observatory,
+                                                 get_tls_observatory)
+from src.plugins.telephone.telephone import get_analyse
+from src.plugins.virustotal.virustotal import get_analyse_url, virus_scan_url
+from src.plugins.whois.whois import get_whois
 
 
 def creer_bouton(demande):

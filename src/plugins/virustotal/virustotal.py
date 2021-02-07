@@ -2,7 +2,7 @@
 # @Date:   23-Apr-2020
 # @Filename: virustotal.py
 # @Last modified by:   michael
-# @Last modified time: 23-Apr-2020
+# @Last modified time: 07-Feb-2021
 # @License: GNU GPL v3
 
 
@@ -19,7 +19,7 @@ import telegram
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
 
-from api.Restricted import restricted
+from src.api.Restricted import restricted
 
 ADRESSE = "https://www.virustotal.com/api/v3/urls"
 HEADERS = {"x-apikey": cfg.virustotal_key}

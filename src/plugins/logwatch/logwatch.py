@@ -2,7 +2,7 @@
 # @Date:   30-Mar-2020
 # @Filename: watchlog.py
 # @Last modified by:   michael
-# @Last modified time: 02-Apr-2020
+# @Last modified time: 07-Feb-2021
 # @License: GNU GPL v3
 
 """Affiche les logs en utilisant logwatch."""
@@ -15,9 +15,9 @@ import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
-from api.button import build_menu
-from api.Restricted import restricted
-from api.send_alert import send_alert
+from src.api.button import build_menu
+from src.api.Restricted import restricted
+from src.api.send_alert import send_alert
 
 
 def job_veille(context):

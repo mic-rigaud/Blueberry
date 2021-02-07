@@ -2,7 +2,7 @@
 # @Date:   27-Apr-2019
 # @Filename: button.py
 # @Last modified by:   michael
-# @Last modified time: 04-Feb-2021
+# @Last modified time: 07-Feb-2021
 # @License: GNU GPL v3
 import json
 import logging
@@ -12,7 +12,7 @@ from telegram import Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext
 
-from api.Restricted import restricted
+from src.api.Restricted import restricted
 
 
 def build_menu(buttons,

@@ -2,7 +2,7 @@
 # @Date:   01-Jan-1970
 # @Filename: mq_pull.py
 # @Last modified by:   michael
-# @Last modified time: 31-Jan-2021
+# @Last modified time: 07-Feb-2021
 # @License: GNU GPL v3
 
 import logging
@@ -12,7 +12,7 @@ import config as cfg
 import zmq
 from telegram import ParseMode
 
-from src.plugins.arpwatch.arpwatch import arpwatch_mqalert
+from src.plugins.arpwatch.arpwatch_tools import arpwatch_mqalert
 
 
 def mqPull(updater):

@@ -2,7 +2,7 @@
 # @Date:   11-Aug-2018
 # @Filename: log.py
 # @Last modified by:   michael
-# @Last modified time: 31-Dec-2019
+# @Last modified time: 07-Feb-2021
 # @License: GNU GPL v3
 
 """Gere les logs."""
@@ -14,8 +14,8 @@ import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
-from api.button import build_menu
-from api.Restricted import restricted
+from src.api.button import build_menu
+from src.api.Restricted import restricted
 
 
 def log_liste():

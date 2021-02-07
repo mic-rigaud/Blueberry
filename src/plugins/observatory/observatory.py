@@ -2,7 +2,7 @@
 # @Date:   08-May-2020
 # @Filename: observatory.py
 # @Last modified by:   michael
-# @Last modified time: 14-May-2020
+# @Last modified time: 07-Feb-2021
 # @License: GNU GPL v3
 
 
@@ -18,7 +18,7 @@ import requests
 from telegram import ParseMode, Update
 from telegram.ext import CallbackContext, CommandHandler
 
-from api.Restricted import restricted
+from src.api.Restricted import restricted
 
 ADRESSE_HTTP_ANALYZE = "https://http-observatory.security.mozilla.org/api/v1/analyze?host="
 ADRESSE_HTTP_SCAN = "https://http-observatory.security.mozilla.org/api/v1/getScanResults?scan="
