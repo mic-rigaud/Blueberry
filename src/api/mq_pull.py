@@ -23,10 +23,10 @@ def mqPull(updater):
     while True:
         recv = receiver.recv()
         task, message = str(recv).split("+")
-        if task == "arpwatch":
+        if "arpwatch" in str(task):
             logging.info("Reception d'une alerte arpwatch")
             arpwatch_mqalert(updater)
-        elif task == "hids":
+        elif "hids" in str(task):
             message = message.replace("\\n", "\n")
             logging.info("Reception de l'alerte : " + message)
             for chat_id in cfg.user:
