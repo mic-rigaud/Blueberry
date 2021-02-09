@@ -2,7 +2,7 @@
 # @Date:   31-Dec-2019
 # @Filename: carto.py
 # @Last modified by:   michael
-# @Last modified time: 06-Feb-2021
+# @Last modified time: 09-Feb-2021
 # @License: GNU GPL v3
 
 
@@ -21,14 +21,16 @@ from telegram.ext import (CallbackContext, CallbackQueryHandler,
                           CommandHandler, ConversationHandler, Filters,
                           MessageHandler)
 
+import src.plugins.carto.carto_conv_modif as conv_modif
 from src.api.api_bdd import del_element, get_info, get_liste
 from src.api.button import build_callback, build_menu
 from src.api.button_bdd import button_modifier, button_supprimer
 from src.api.Restricted import restricted
 from src.api.send_alert import send_alert
 from src.plugins.carto.carto_job import start_veille
-from src.plugins.carto.carto_tools import (carto_ping, carto_ping_all,
-                                           creer_carto, remplir_ip_voisin)
+from src.plugins.carto.carto_tools import (carto_creer_bouton_info, carto_ping,
+                                           carto_ping_all, creer_carto,
+                                           remplir_ip_voisin)
 from src.plugins.carto.Ip import Ip
 
 ORDERED = {"date": {0: Ip.time_first,
@@ -142,19 +144,6 @@ def creer_bouton():
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=2))
 
 
-def carto_creer_bouton_info(id, filtre):
-    button_list = []
-    button_list.append(InlineKeyboardButton(
-        "Ping", callback_data="carto_ping_{}_{}".format(id, filtre)))
-    button_list.append(InlineKeyboardButton(
-        "Scan", callback_data="carto_scan_{}_{}".format(id, filtre)))
-    button_list.append(InlineKeyboardButton(
-        "Supprimer", callback_data="carto_scan_{}_{}".format(id, filtre)))
-    button_list.append(InlineKeyboardButton(
-        "Retour", callback_data="carto_lister_{}".format(filtre)))
-    return InlineKeyboardMarkup(build_menu(button_list, n_cols=2))
-
-
 @restricted
 def carto(update: Update, context: CallbackContext):
     """Lance carto."""
@@ -177,4 +166,13 @@ def add(dispatcher):
     dispatcher.add_handler(CallbackQueryHandler(button_lister, pattern="^carto_liste."))
     dispatcher.add_handler(CallbackQueryHandler(button_graph, pattern="^carto_graph"))
     dispatcher.add_handler(CallbackQueryHandler(button_info, pattern="carto_info."))
+    conv_carto = ConversationHandler(
+        entry_points=[CallbackQueryHandler(conv_modif.button_modif, pattern="^carto_modifier.")],
+        states={
+            conv_modif.ETAPE1: [MessageHandler(Filters.text, conv_modif.etape1)]
+            },
+        fallbacks=[CommandHandler('end', conv_modif.conv_cancel)],
+        conversation_timeout=120
+        )
+    dispatcher.add_handler(conv_carto)
     start_veille(dispatcher.job_queue)

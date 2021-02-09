@@ -3,7 +3,7 @@
 # @Project: Blueberry
 # @Filename: fabfile.py
 # @Last modified by:   michael
-# @Last modified time: 07-Feb-2021
+# @Last modified time: 09-Feb-2021
 # @License: GNU GPL v3
 
 from __future__ import with_statement
@@ -32,10 +32,9 @@ def prepare_data_test():
 def test():
     """Lance test unitaire."""
     prepare_data_test()
-    with lcd("./src"):
-        with settings(warn_only=True):
-            result = local('python3 -m pytest --cov=. ./', capture=True)
-            print(result)
+    with settings(warn_only=True):
+        result = local('python3 -m pytest --cov=. ./', capture=True)
+        print(result)
     if result.failed and not confirm("Tests failed. Continue anyway?"):
         abort("Aborting at user request.")
 
@@ -79,8 +78,9 @@ def config_bdd():
     try:
         bdd.db.connect
         bdd.db.create_tables([Ip])
-    except:
+    except Exception as exc:
         print("=== La base SQL existe déjà ===")
+        print(exc)
 
 
 def uninstall():

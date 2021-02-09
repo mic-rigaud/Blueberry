@@ -2,7 +2,7 @@
 # @Date:   01-Jan-1970
 # @Filename: Ip.py
 # @Last modified by:   michael
-# @Last modified time: 07-Feb-2021
+# @Last modified time: 09-Feb-2021
 # @License: GNU GPL v3
 
 from datetime import datetime
@@ -25,12 +25,15 @@ class Ip(BaseModel):
     confiance = BooleanField(default=False)
     status = BooleanField(default=True)
     ip_voisin = CharField(default="")
+    alias = CharField(default="")
 
     def str_compact(self):
         if self.status:
             result_icon = "✅ "
         else:
             result_icon = "❌ "
+        if self.alias != "":
+            return result_icon + str(self.alias)
         if self.hostname != "unknown":
             return result_icon + str(self.hostname)
         return result_icon + str(self.ip)
@@ -45,6 +48,8 @@ class Ip(BaseModel):
     def __str__(self):
         reponse = "<b>{}</b>\n\n".format(str(self.ip))
         reponse += "Nom : {}\n".format(str(self.hostname))
+        if self.alias != "":
+            reponse += "Alias : {}\n".format(str(self.alias))
         reponse += "Mac : {}\n\n".format(str(self.mac))
         reponse += "Première connexion : {}\n".format(str(self.time_first))
         reponse += "Dernière connexion : {}\n".format(str(self.time_last))

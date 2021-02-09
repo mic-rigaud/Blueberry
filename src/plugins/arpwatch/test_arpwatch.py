@@ -2,15 +2,16 @@
 # @Date:   31-Mar-2020
 # @Filename: test_arpwatch.py
 # @Last modified by:   michael
-# @Last modified time: 03-Apr-2020
+# @Last modified time: 09-Feb-2021
 # @License: GNU GPL v3
 
 
 import config as cfg
 import pytest
 
-from plugins.arpwatch.arpwatch import arpwatch_liste, arpwatch_read, parse
-from plugins.arpwatch.ArpWatchError import ArpWatchError
+from src.plugins.arpwatch.arpwatch_tools import (arpwatch_liste, arpwatch_read,
+                                                 parse)
+from src.plugins.arpwatch.ArpWatchError import ArpWatchError
 
 
 def test_parse():

@@ -2,7 +2,7 @@
 # @Date:   01-Jan-1970
 # @Filename: carto_tools.py
 # @Last modified by:   michael
-# @Last modified time: 06-Feb-2021
+# @Last modified time: 09-Feb-2021
 # @License: GNU GPL v3
 
 import logging
@@ -40,8 +40,6 @@ def carto_ping_all():
         carto_ping(ip.id)
     logging.info("Fin du scan des adresses IP")
     return "L'ensemble des Ip connues ont ete pingé"
-
-#
 
 
 def get_ip_voisin(ip):
@@ -102,3 +100,18 @@ def creer_carto():
             else:
                 dot.edge(ip.ip, ip.ip_voisin)
     dot.render()
+
+
+def carto_creer_bouton_info(id, filtre):
+    button_list = []
+    button_list.append(InlineKeyboardButton(
+        "Ping", callback_data="carto_ping_{}_{}".format(id, filtre)))
+    button_list.append(InlineKeyboardButton(
+        "Scan", callback_data="carto_scan_{}_{}".format(id, filtre)))
+    button_list.append(InlineKeyboardButton(
+        "Supprimer", callback_data="carto_scan_{}_{}".format(id, filtre)))
+    button_list.append(InlineKeyboardButton(
+        "Modifier", callback_data="carto_modifier_{}_{}".format(id, filtre)))
+    button_list.append(InlineKeyboardButton(
+        "Retour", callback_data="carto_lister_{}".format(filtre)))
+    return InlineKeyboardMarkup(build_menu(button_list, n_cols=2))
