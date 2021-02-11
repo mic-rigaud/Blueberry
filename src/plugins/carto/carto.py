@@ -2,7 +2,7 @@
 # @Date:   31-Dec-2019
 # @Filename: carto.py
 # @Last modified by:   michael
-# @Last modified time: 09-Feb-2021
+# @Last modified time: 11-Feb-2021
 # @License: GNU GPL v3
 
 
@@ -14,14 +14,8 @@ from functools import partial
 from subprocess import PIPE, Popen  # nosec
 
 import config as cfg
-import telegram
-from telegram import (InlineKeyboardButton, InlineKeyboardMarkup,
-                      KeyboardButton, ReplyKeyboardMarkup, Update)
-from telegram.ext import (CallbackContext, CallbackQueryHandler,
-                          CommandHandler, ConversationHandler, Filters,
-                          MessageHandler)
-
 import src.plugins.carto.carto_conv_modif as conv_modif
+import telegram
 from src.api.api_bdd import del_element, get_info, get_liste
 from src.api.button import build_callback, build_menu
 from src.api.button_bdd import button_modifier, button_supprimer
@@ -32,11 +26,16 @@ from src.plugins.carto.carto_tools import (carto_creer_bouton_info, carto_ping,
                                            carto_ping_all, creer_carto,
                                            remplir_ip_voisin)
 from src.plugins.carto.Ip import Ip
+from telegram import (InlineKeyboardButton, InlineKeyboardMarkup,
+                      KeyboardButton, ReplyKeyboardMarkup, Update)
+from telegram.ext import (CallbackContext, CallbackQueryHandler,
+                          CommandHandler, ConversationHandler, Filters,
+                          MessageHandler)
 
 ORDERED = {"date": {0: Ip.time_first,
-                    1: "Date croissant"},
+                    1: "croissant"},
            "dated": {0: Ip.time_first.desc(),
-                     1: "Date descroissant"},
+                     1: "descroissant"},
            }
 creer_bouton_liste = partial(get_liste, Table=Ip, plugins="carto",
                              ordered_liste=ORDERED, ordered="dated")
@@ -70,7 +69,17 @@ def button_info(update: Update, context: CallbackContext):
 def button_lister(update: Update, context: CallbackContext):
     query = update.callback_query
     reponse = "Voici la liste de vos cartos"
-    reply_markup = creer_bouton_liste()
+    filtre = query.data.split("_")
+    if len(filtre) == 2:
+        reponse = "Voici votre carto classé par date de rencontre {}\n".format(ORDERED["date"][1])
+        reply_markup = creer_bouton_liste()
+    elif len(filtre) == 5:
+        page = filtre[3]
+        reponse = "Voici votre carto classé par date de rencontre {}".format(ORDERED[filtre[4]][1])
+        reply_markup = creer_bouton_liste(ordered=filtre[4], page=page)
+    else:
+        reponse = "Voici votre carto classé par date de rencontre {}".format(ORDERED[filtre[2]][1])
+        reply_markup = creer_bouton_liste(ordered=filtre[2])
     context.bot.edit_message_text(chat_id=query.message.chat_id,
                                   message_id=query.message.message_id,
                                   text=reponse,
