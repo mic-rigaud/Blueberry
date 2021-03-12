@@ -51,3 +51,7 @@ wcwidth==0.1.8
 webb==0.9.2.5
 zipp==3.1.0
 zope.interface==4.7.2
+
+pyzmq==22.0.3
+setuptools==54.1.1
+zmq==0.0.0
