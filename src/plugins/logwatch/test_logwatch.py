@@ -9,7 +9,7 @@
 # import config as cfg
 # import pytest
 
-from plugins.logwatch.logwatch import logwatch_liste
+from src.plugins.logwatch.logwatch import logwatch_liste
 
 
 def test_logwatch():

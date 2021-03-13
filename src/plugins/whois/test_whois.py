@@ -14,7 +14,7 @@
 # @License: GNU GPL v3
 
 
-from plugins.whois.whois import print_analyse
+from src.plugins.whois.whois import print_analyse
 
 
 def test_print_analyse():

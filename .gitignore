@@ -38,7 +38,7 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
-.coverage
+*.coverage
 .coverage.*
 .cache
 nosetests.xml
@@ -99,3 +99,7 @@ major_home.*.json
 OLD
 *old*
 *suricata-log.json
+
+Pipfile*
+.idea/
+*.gv*

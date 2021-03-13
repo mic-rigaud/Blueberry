@@ -7,7 +7,7 @@
 
 import config as cfg
 
-from plugins.nids.nids_tools import NidsTools
+from src.plugins.nids.NidsTools import NidsTools
 
 
 def test_get_last_log():
@@ -21,7 +21,7 @@ def test_get_last_log():
     assert "[ERROR] Fichier" in logs
 
     logs = NidsTools(cfg.suricata_log).get_last_log("toto")
-    assert "[ERROR] Exception" in logs
+    assert "[ERROR] Exception" in logs
 
     logs = NidsTools(cfg.suricata_log).get_last_log(0)
     assert isinstance(logs, list)

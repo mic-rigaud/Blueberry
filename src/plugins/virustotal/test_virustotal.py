@@ -6,7 +6,7 @@
 # @License: GNU GPL v3
 
 
-from plugins.virustotal.virustotal import print_analyse
+from src.plugins.virustotal.virustotal import print_analyse
 
 
 def test_print_analyse():

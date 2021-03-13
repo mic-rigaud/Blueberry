@@ -1,9 +1,14 @@
 [Unit]
 Description=Blueberry
-After=network.target
+After=network-online.target
 
 [Service]
 Type=simple
 User=blueberry
+Group=blueberry
 WorkingDirectory={{dir}}
 ExecStart=/usr/bin/python3 ./main.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

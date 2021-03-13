@@ -8,22 +8,17 @@
 
 import logging
 
-from src.api.button import build_menu
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import (CallbackContext, CallbackQueryHandler,
-                          CommandHandler, ConversationHandler, Filters,
-                          MessageHandler)
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-NUMBER_LISTE = 10
+from src.api.button import build_menu
+
+NUMBER_LISTE = 15
 
 
 def get_liste(Table, plugins, ordered_liste, ordered, exp=True, page=1):
+    button_list = []
     try:
-        if ordered[-1] == "d":
-            filtre_d = ordered[:-1]
-        else:
-            filtre_d = ordered + "d"
-        button_list = []
+        filtre_d = ordered[:-1] if ordered[-1] == "d" else ordered + "d"
         for element in Table.select().where(exp).order_by(ordered_liste[ordered][0]).paginate(int(page), NUMBER_LISTE):
             line = element.str_compact()
             if line:

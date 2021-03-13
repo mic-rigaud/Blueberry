@@ -3,7 +3,7 @@ import shutil
 
 import config as cfg
 
-from plugins.nids.nids import nids_alert
+from src.plugins.nids.nids import nids_alert
 
 
 def test_nids_alert():

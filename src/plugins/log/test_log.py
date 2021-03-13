@@ -1,7 +1,7 @@
 import pytest
 from telegram import InlineKeyboardMarkup
 
-from plugins.log.log import creer_bouton, log_liste, log_rm
+from src.plugins.log.log import creer_bouton, log_liste, log_rm
 
 
 def test_log_liste():

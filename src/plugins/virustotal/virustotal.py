@@ -34,7 +34,7 @@ def print_analyse(analyse):
             if result == "clean":
                 result_icon = "✅"
             elif result == "unrated":
-                result_icon == "❓"
+                result_icon = "❓"
             else:
                 result_icon = "❌"
             reponse += "{} - {}\n".format(result_icon, scanner)
@@ -48,13 +48,13 @@ def virus_scan_url(url):
     data = {"url": url}
     session = requests.Session()
     req = session.post(ADRESSE, headers=HEADERS, data=data)
-    reponse = json.loads((req.content).decode("utf-8"))
+    reponse = json.loads(req.content.decode("utf-8"))
     return reponse["data"]["id"].split('-')[1]
 
 
-def get_analyse_url(id):
-    req = requests.get(ADRESSE + "/" + id, headers=HEADERS)
-    analyse = json.loads((req.content).decode("utf-8"))
+def get_analyse_url(id_suspect):
+    req = requests.get(ADRESSE + "/" + id_suspect, headers=HEADERS)
+    analyse = json.loads(req.content.decode("utf-8"))
     return print_analyse(analyse)
 
 

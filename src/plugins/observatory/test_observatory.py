@@ -6,7 +6,7 @@
 # @License: GNU GPL v3
 
 
-from plugins.observatory.observatory import (get_icon, print_analyse,
+from src.plugins.observatory.observatory import (get_icon, print_analyse,
                                              print_scan, print_tls_result)
 
 ANALYSE = {"algorithm_version": 2,

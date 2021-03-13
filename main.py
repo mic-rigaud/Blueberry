@@ -1,26 +1,22 @@
-# @Author: michael
-# @Date:   13-Feb-2018
-# @Project: Blueberry
-# @Filename: main.py
-# @Last modified by:   michael
-# @Last modified time: 07-Feb-2021
-# @License: GNU GPL v3
-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time    : 13/03/2021 10:10
+# @Author  : Michael
+# @File    : main.py
+# @Project : Blueberry
 
 import logging
 import os
 import sys
 from multiprocessing import Process
 
-import config as cfg
 import telegram
 from telegram import Update
-from telegram.ext import (CallbackContext, CallbackQueryHandler,
-                          CommandHandler, Filters, MessageHandler, Updater)
+from telegram.ext import (CallbackContext, CommandHandler, Filters, MessageHandler, Updater)
 
-from src.api.button import button
-from src.api.mq_pull import mqPull
+import config as cfg
 from src.api.Restricted import restricted
+from src.api.mq_pull import mqPull
 
 sys.path.append(os.path.dirname(os.getcwd()))
 sys.path.append(os.getcwd())

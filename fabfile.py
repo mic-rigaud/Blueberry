@@ -11,8 +11,8 @@ from __future__ import with_statement
 from datetime import datetime, timedelta, timezone
 
 import config as cfg
-from fabric.api import abort, env, local, run, settings, sudo
-from fabric.context_managers import cd, lcd
+from fabric.api import abort, env, local, settings, sudo
+from fabric.context_managers import cd
 from fabric.contrib.console import confirm
 
 import src.api.BDD as bdd
@@ -50,33 +50,27 @@ def test_code():
 
 def install():
     """Install blueberry."""
-    copy_config()
     config_service()
     config_bdd()
     local("mkdir log")
     local("touch log/blueberry.log")
 
 
-def copy_config():
-    """Copy le fichier de config a cote du main."""
-    # TODO: Test que le fichier de config est propre
-    local("cp config.py src/config.py")
-
-
 def config_service():
     """Configure le service Blueberry."""
     local(
-        "sed -e \"s/{{{{dir}}}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(cfg.work_dir.replace("/", "\/")))
+        "sed -e \"s/{{{{dir}}}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(
+            cfg.work_dir.replace("/", "\/")))
     local("chown root: /etc/systemd/system/blueberry.service")
     # Permet d'éviter de planter dans les runner Gitlab-CI
     with settings(warn_only=True):
-        result = local("systemctl enable blueberry.service")
+        local("systemctl enable blueberry.service")
 
 
 def config_bdd():
     """Permet l'installation de la BDD automatise."""
     try:
-        bdd.db.connect
+        var = bdd.db.connect
         bdd.db.create_tables([Ip])
     except Exception as exc:
         print("=== La base SQL existe déjà ===")

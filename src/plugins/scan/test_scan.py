@@ -4,7 +4,9 @@
 # @Last modified by:   michael
 # @Last modified time: 16-May-2020
 # @License: GNU GPL v3
-from plugins.scan.scan import creer_bouton
+
+
+from src.plugins.scan.scan import creer_bouton
 
 
 def test_creer_bouton():

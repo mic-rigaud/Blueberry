@@ -5,9 +5,8 @@
 # @Last modified time: 03-Apr-2020
 # @License: GNU GPL v3
 
-import pytest
 
-from plugins.sysinfo.sysinfo import (status_cpu, status_ram, status_service,
+from src.plugins.sysinfo.sysinfo import (status_cpu, status_ram, status_service,
                                      status_str, temperature_raspberry)
 
 
