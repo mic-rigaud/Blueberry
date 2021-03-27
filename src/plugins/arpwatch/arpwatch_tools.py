@@ -20,12 +20,11 @@ def arpwatch_mqalert(context):
         elements = arpwatch_read()
         for i in elements:
             element = elements[i]
-            if not isempty(element):
-                if add_element(element):
-                    message = "Un nouvel appareil repéré sur le réseau:\n" + \
-                        "{}  {}  {}\n".format(element["hostname"], element["ip"],
-                                              element["timestamp"])
-                    send_alert(context, message)
+            if not isempty(element) and add_element(element):
+                message = "Un nouvel appareil repéré sur le réseau:\n" + \
+                    "{}  {}  {}\n".format(element["hostname"], element["ip"],
+                                          element["timestamp"])
+                send_alert(context, message)
     except ArpWatchError as exception:
         send_alert(context, str(exception))
 

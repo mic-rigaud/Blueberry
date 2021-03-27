@@ -8,63 +8,66 @@
 
 from __future__ import with_statement
 
+import getpass
 from datetime import datetime, timedelta, timezone
 
-import config as cfg
-from fabric.api import abort, env, local, settings, sudo
-from fabric.context_managers import cd
-from fabric.contrib.console import confirm
+from fabric import task
+from invocations.console import confirm
+from invoke import Exit, Responder
 
+import config as cfg
 import src.api.BDD as bdd
 from src.plugins.carto.Ip import Ip
 
-env.hosts = cfg.hosts
+my_hosts = cfg.hosts
 
 
-def prepare_data_test():
+@task
+def prepare_data_test(c):
     """Creer les data nécéssaires aux tests."""
     offset = timezone(timedelta(hours=2))
     date = datetime.now(offset).strftime("%Y-%m-%dT%H:%M:%S.%f%z")
-    local("sed 's/{DATE}/" + date +
+    c.run("sed 's/{DATE}/" + date +
           "/g' src/test/data/suricata-log.temp.json > src/test/data/suricata-log.json")
 
 
-def test():
+@task
+def test(c):
     """Lance test unitaire."""
-    prepare_data_test()
-    with settings(warn_only=True):
-        result = local('python3 -m pytest --cov=. ./', capture=True)
-        print(result)
-    if result.failed and not confirm("Tests failed. Continue anyway?"):
-        abort("Aborting at user request.")
+    prepare_data_test(c)
+    result = c.run(
+        "./venv/bin/python3 -m pytest --cov=. --ignore=./src/plugins/__OLD", warn=True)
+    if not result and not confirm("Tests failed. Continue anyway?"):
+        raise Exit("Aborting at user request.")
 
 
-def test_code():
+@task
+def test_code(c):
     """Lance code security analyse."""
-    with settings(warn_only=True):
-        result = local('bandit -r ./ -x *config.py,*test*.py', capture=True)
-    print(result)
-    if result.failed and not confirm("Tests failed. Continue anyway?"):
-        abort("Aborting at user request.")
+    result = c.run("./venv/bin/bandit -r ./ -x *config.py,*test*.py", warn=True)
+    if not result and not confirm("Tests failed. Continue anyway?"):
+        raise Exit("Aborting at user request.")
 
 
-def install():
+@task
+def install(c):
     """Install blueberry."""
-    config_service()
-    config_bdd()
-    local("mkdir log")
-    local("touch log/blueberry.log")
+    config_service(c)
+    config_bdd(c)
+    c.run("mkdir log")
+    c.run("touch log/blueberry.log")
 
 
-def config_service():
+@task
+def config_service(c):
     """Configure le service Blueberry."""
-    local(
+    c.run(
         "sed -e \"s/{{{{dir}}}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(
             cfg.work_dir.replace("/", "\/")))
-    local("chown root: /etc/systemd/system/blueberry.service")
+    c.run("chown root: /etc/systemd/system/blueberry.service")
     # Permet d'éviter de planter dans les runner Gitlab-CI
-    with settings(warn_only=True):
-        local("systemctl enable blueberry.service")
+    # with settings(warn_only=True):
+    #     c.run("systemctl enable blueberry.service")
 
 
 def config_bdd():
@@ -72,58 +75,61 @@ def config_bdd():
     try:
         var = bdd.db.connect
         bdd.db.create_tables([Ip])
-    except Exception as exc:
+    except Exception as e:
         print("=== La base SQL existe déjà ===")
-        print(exc)
+        print(e)
 
 
-def uninstall():
-    local("systemctl stop blueberry")
-    local("rm /etc/systemd/system/blueberry.service")
+@task(hosts=my_hosts)
+def uninstall(c):
+    c.run("systemctl stop blueberry")
+    c.run("rm /etc/systemd/system/blueberry.service")
 
 
-def commit():
+@task
+def commit(c):
     """Git commit."""
-    local("git commit")
+    c.run("git commit")
 
 
-def push():
+@task
+def push(c):
     """Git push."""
-    local("git push")
+    c.run("git push")
 
 
-def prepare_deploy():
+@task
+def prepare_deploy(c):
     """Test + commit + push."""
-    test()
-    test_code()
-    commit()
-    push()
+    test(c)
+    test_code(c)
+    commit(c)
+    push(c)
 
 
-def deploy():
+@task(hosts=my_hosts)
+def deploy(c):
     """Deploy sur le serveur."""
     # prepare_deploy()
     code_dir = cfg.hosts_dir
-    with cd(code_dir):
-        sudo('git pull')
-        sudo('systemctl restart blueberry')
+    command = "cd {} && git pull".format(code_dir)
+    c.run(command, pty=True)
+    c.run('sudo systemctl restart blueberry', warn=True, pty=True)
 
-
-def stop_server():
+@task(hosts=my_hosts)
+def stop_server(c):
     """Stop le serveur."""
-    code_dir = cfg.hosts_dir
-    with cd(code_dir):
-        sudo('systemctl stop blueberry')
+    c.run("sudo systemctl stop blueberry", warn=True, pty=True)
 
 
-def start_local(args=""):
+@task
+def start_local(c):
     """Demarre en local."""
-    commande = "python3 main.py" + args
-    local(commande)
+    commande = "./venv/bin/python3 main.py"
+    c.run(commande, pty=True)
 
 
-def start_server():
+@task(hosts=my_hosts)
+def start_server(c):
     """Start le serveur."""
-    code_dir = cfg.hosts_dir
-    with cd(code_dir):
-        sudo('systemctl start blueberry')
+    c.run('sudo systemctl start blueberry', warn=True, pty=True)
