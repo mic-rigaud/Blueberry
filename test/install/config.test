@@ -33,13 +33,13 @@ hosts_dir = "/home/blueberry/blueberry"
 
 # Les différents fichier ou sont installés les résultats des services suivant:
 # nids
-suricata_log = './test/data/suricata-log.json'
+suricata_log = './src/test/data/suricata-log.json'
 
 # Logwatch report
-logwatch_report = "./test/data/report-test"
+logwatch_report = "./src/test/data/report-test"
 
 # Arpwatch mail report
-arpwatch_mail = "./test/data/arpwatch-test"
+arpwatch_mail = "./src/test/data/arpwatch-test"
 
 # Blueberry ne fait que regarder régulièrement les fichiers définis précédemment
 # Les fréquences ci-dessous définissent les fréquences de scan et d'alerting
