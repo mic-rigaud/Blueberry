@@ -20,25 +20,55 @@ Cet outil permet superviser via Telegram un ensemble d'autre outils de sécurit�
 | `\log` | Affiche les logs de Blueberry. Permet aussi de les supprimer. |
 | `\logwatch` | Permet d'afficher le rapport [logwatch](https://doc.ubuntu-fr.org/logwatch). Le rapport est également envoyé tous les jours à une heure configurable |
 | `\arpwatch` | Permet de lister les machines vu par [arpwatch](https://linux.die.net/man/8/arpwatch) et alerte si une nouvelle machine apparaît. L'alerte est remonté une fois par jours à une heure configurable. |
-| `\carto` | Renvoi une cartographie du réseau sous la forme d'un mind map. Attention, cette fonction prend pour hypothèse que votre réseau commence en '192.168' et qu'il n'y a qu'un chemin réseau pour atteindre une machine. Cette cartographie ne fonctionne plus sur des réseaux complexes.|
+| `\carto` | Permet d'avoir la carto de votre réseau. Peut réaliser une cartographie sous la forme d'un mind map. Attention, cette fonction graphique prend pour hypothèse que votre réseau commence en '192.168' et qu'il n'y a qu'un chemin réseau pour atteindre une machine. Cette cartographie ne fonctionne plus sur des réseaux complexes.|
 | `\virustotal` | Permet de scanner une url via l'api de [virustotal](https://www.virustotal.com/) |
 | `\whois` | Permet de faire un whois sur une adresse ip/url/domaine. Les informations sont récupérées sur  [whois xml API](https://www.whoisxmlapi.com) |
-| `\observatory` | Permet d'évaluer une nom de domaine au niveau `http` et `tls` avec les outils de [Mozilla](https://observatory.mozilla.org/) |
-| `\scan` | Lance un scan de l'URL ou Domain ou IP en utilisant les plugins installés par ailleurs |
+| `\scan` | Lance un scan de l'URL ou Domain ou IP ou numéro de Téléphone en utilisant les plugins installés par ailleurs |
 | `\help` | Affiche l'aide. |
+
+
+## Fonctionnalités disponibles
+
+### Surveillance du réseau
+Suricata est un NIDS (Network Intrusion Detection System) il permet de détecter les tentatives d'attaques sur le réseau. Blueberry envoi automatiquement a une fréquence choisi dans *config.py* les alertes remontées par suricata.
+
+Blueberry permet également de voir les modules chargés par Suricata (en dev)
+
+### Detection des nouveaux appareils
+Arpwatch est un outil qui permet de détecter les nouvelles machines sur le réseau via les requètes ARP. Blueberry, informe immédiatement des nouveaux appareils trouvés par arpwatch.
+
+De plus, Blueberry permet de leur donner un Alias via `/carto --> Lister --> [nom de la machine] --> Modifier`
+
+
+### Scan à la demande
+
+Blueberry s'appuit sur des interfaces web pour proposer des scans sur les objets suivants:
+- IP
+- Nom de Domain
+- URL
+- Numéro de téléphone
+
+Les informations renvoyées dépendent de l'objet scanné. 
+
+### Etat de la machine
+
+Blueberry permet d'effectuer une supervision de votre machine et vous alerte en cas de problème (température trop haute, etc...)
 
 
 ## Installation
 
-*Vous n'avez rien a faire si vous utilisez le script d'installation [Blueberry-Ansible](https://gitlab.com/mic-rigaud/blueberry-ansible)*
+### Automatisé
 
-Tout d'abord il faut copier config.test en config.py
+Vous pouvez utiliser le script ansible disponible sur [Blueberry-Ansible](https://gitlab.com/mic-rigaud/blueberry-ansible)
 
-```
-cp test/install/config.test config.py
-```
+Dans ce cas, suivre uniquement le guide d'utilisation présent sur dépot Ansible.
 
-Puis il faut compléter le fichier de configuration
+### Manuelle
+
+*Attention, via cette installation certaines fonctions ne marcherons pas. Par exemple, la détection des nouveaux appareils ne sera pas temps réel car une modification des script arpwatch est nécessaire.*
+
+
+Sinon il faut compléter le fichier de configuration
 
 ```
 nano config.py
@@ -48,6 +78,7 @@ Enfin:
 ```shell
 pip3 install -r requirements.txt
 fab install
+systemctl daemon-reload
 systemctl start blueberry
 ```
 
@@ -57,7 +88,7 @@ systemctl start blueberry
 ### Pourquoi ce nom?
 
 Ce nom a été choisi pour deux raisons:
-- Premièrement, Blueberry a pour but d'être installé sur un raspberry. Et les gâteau aux myrtilles et aux framboises sont les meilleurs!
+- Premièrement, Blueberry a pour but d'être installé sur un raspberry. Et les gâteaux aux myrtilles et aux framboises sont les meilleurs!
 - Deuxièmement, ce logiciel doit chasser les intrus sur notre réseau. On peut voir le parallèle avec la BD de cow-boy de même nom... On va chasser les méchants!
 
 ### Pourquoi utiliser Telegram?
