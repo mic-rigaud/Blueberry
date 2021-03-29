@@ -9,7 +9,7 @@ from src.plugins.nids.nids import nids_alert
 def test_nids_alert():
     # Test avec une alerte
     messages = nids_alert()
-    assert "alert" in messages[0]
+    assert "signature id : 2403378" in messages[0]
     assert "[ERROR]" not in messages[0]
 
     # Test avec evenements mais sans alertes

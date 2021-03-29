@@ -35,7 +35,7 @@ def test(c):
     """Lance test unitaire."""
     prepare_data_test(c)
     result = c.run(
-        "./venv/bin/python3 -m pytest --cov=. --ignore=./src/plugins/__OLD", warn=True)
+        "./venv/bin/python3 -m pytest", warn=True)
     if not result and not confirm("Tests failed. Continue anyway?"):
         raise Exit("Aborting at user request.")
 
