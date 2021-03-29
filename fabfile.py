@@ -8,12 +8,11 @@
 
 from __future__ import with_statement
 
-import getpass
 from datetime import datetime, timedelta, timezone
 
 from fabric import task
 from invocations.console import confirm
-from invoke import Exit, Responder
+from invoke import Exit
 
 import config as cfg
 import src.api.BDD as bdd
@@ -53,7 +52,7 @@ def test_code(c):
 def install(c):
     """Install blueberry."""
     config_service(c)
-    config_bdd(c)
+    config_bdd()
     c.run("mkdir log")
     c.run("touch log/blueberry.log")
 
@@ -64,10 +63,7 @@ def config_service(c):
     c.run(
         "sed -e \"s/{{{{dir}}}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(
             cfg.work_dir.replace("/", "\/")))
-    c.run("chown root: /etc/systemd/system/blueberry.service")
-    # Permet d'éviter de planter dans les runner Gitlab-CI
-    # with settings(warn_only=True):
-    #     c.run("systemctl enable blueberry.service")
+    c.run("chown root: /etc/systemd/system/blueberry.service", warn=True)
 
 
 def config_bdd():
@@ -112,9 +108,10 @@ def deploy(c):
     """Deploy sur le serveur."""
     # prepare_deploy()
     code_dir = cfg.hosts_dir
-    command = "cd {} && git pull".format(code_dir)
+    command = "sudo sh -c 'cd {} && git pull'".format(code_dir)
     c.run(command, pty=True)
     c.run('sudo systemctl restart blueberry', warn=True, pty=True)
+
 
 @task(hosts=my_hosts)
 def stop_server(c):
