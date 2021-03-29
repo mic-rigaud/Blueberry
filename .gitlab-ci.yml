@@ -17,7 +17,7 @@ test:
       - pip3 install -r requirements.txt
       - cp ./test/install/config.test ./config.py
       - fab install
-      - fab test
+      - python3 -m pytest
 
 
 code_quality:
