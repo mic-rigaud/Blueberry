@@ -17,6 +17,7 @@ test:
       - pip3 install -r requirements.txt
       - cp ./test/install/config.test ./config.py
       - fab install
+      - fab prepare_data_test
       - python3 -m pytest
 
 
