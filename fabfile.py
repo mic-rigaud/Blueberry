@@ -36,16 +36,14 @@ def test(c):
     prepare_data_test(c)
     result = c.run(
         "./venv/bin/python3 -m pytest", warn=True)
-    if not result and not confirm("Tests failed. Continue anyway?"):
-        raise Exit("Aborting at user request.")
+
 
 
 @task
 def test_code(c):
     """Lance code security analyse."""
     result = c.run("./venv/bin/bandit -r ./ -x *config.py,*test*.py", warn=True)
-    if not result and not confirm("Tests failed. Continue anyway?"):
-        raise Exit("Aborting at user request.")
+
 
 
 @task
