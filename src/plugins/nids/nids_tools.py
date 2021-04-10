@@ -6,7 +6,7 @@
 #    By: michael <michael@mic-rigaud.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/12 12:26:07 by michael           #+#    #+#              #
-#    Updated: 2021/03/27 14:40:02 by michael          ###   ########.fr        #
+#    Updated: 2021/04/10 11:27:32 by michael          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,9 +75,19 @@ def nids_alert():
     if "[ERROR]" in evenements:
         return ["Il y a le problème suivant:\n " + str(evenements)]
     message = [parse_event(event) for event in evenements if (
-            event["event_type"] == "alert"
-            and event["alert"]["category"] != "Not Suspicious Traffic"
+        is_relevant(event)
     ) and str(event).replace('\n', '') != ""]
     if not message:
         return ["Il n'y a pas d'alertes"]
     return message
+
+
+def is_relevant(event):
+    if event["event_type"] == "alert" and event["alert"]["category"] != "Not Suspicious Traffic" and "SCAN" not in \
+            event['alert']['signature']:
+        return (
+                "http" not in event
+                or "redirect" not in event["http"]
+                or "/yunohost/admin" not in event["http"]["redirect"]
+        )
+    return False

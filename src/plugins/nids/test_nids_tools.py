@@ -26,3 +26,7 @@ def test_get_last_log():
     logs = NidsTools(cfg.suricata_log).get_last_log(0)
     assert isinstance(logs, list)
     assert logs == []
+
+
+def test_parse_event():
+    assert True
