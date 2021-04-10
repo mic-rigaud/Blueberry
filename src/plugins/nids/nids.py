@@ -33,7 +33,7 @@ def button_alert(update: Update, context: CallbackContext):
                                   message_id=query.message.message_id,
                                   text="Recherche en cours.\n<i>Attention cela peut mettre un certain temps.</i>",
                                   parse_mode=telegram.ParseMode.HTML)
-    messages = nids_alert()
+    messages = nids_alert(all=True)
     for message in messages:
         context.bot.send_message(chat_id=query.message.chat_id,
                                  text=message,

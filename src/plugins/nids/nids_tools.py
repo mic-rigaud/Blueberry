@@ -6,7 +6,7 @@
 #    By: michael <michael@mic-rigaud.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/12 12:26:07 by michael           #+#    #+#              #
-#    Updated: 2021/04/10 11:27:32 by michael          ###   ########.fr        #
+#    Updated: 2021/04/10 11:40:42 by michael          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,26 +68,30 @@ def parse_event(event):
         return str(event)
 
 
-def nids_alert():
+def nids_alert(all=False):
     evenements = NidsTools(cfg.suricata_log).get_last_log(cfg.freq_nids)
     if not evenements:
         return ["Il n'y a pas d'évènements"]
     if "[ERROR]" in evenements:
         return ["Il y a le problème suivant:\n " + str(evenements)]
     message = [parse_event(event) for event in evenements if (
-        is_relevant(event)
+        is_relevant(event, all)
     ) and str(event).replace('\n', '') != ""]
     if not message:
         return ["Il n'y a pas d'alertes"]
     return message
 
 
-def is_relevant(event):
-    if event["event_type"] == "alert" and event["alert"]["category"] != "Not Suspicious Traffic" and "SCAN" not in \
-            event['alert']['signature']:
-        return (
-                "http" not in event
-                or "redirect" not in event["http"]
-                or "/yunohost/admin" not in event["http"]["redirect"]
-        )
-    return False
+def is_relevant(event, all):
+    if all:
+        if event["event_type"] == "alert" and event["alert"]["category"] != "Not Suspicious Traffic":
+            return True
+    else:
+        if event["event_type"] == "alert" and event["alert"]["category"] != "Not Suspicious Traffic" and "SCAN" not in \
+                event['alert']['signature']:
+            return (
+                    "http" not in event
+                    or "redirect" not in event["http"]
+                    or "/yunohost/admin" not in event["http"]["redirect"]
+            )
+        return False
