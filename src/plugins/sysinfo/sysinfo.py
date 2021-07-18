@@ -14,43 +14,8 @@ from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
 
 from src.api.Restricted import restricted
-
-
-def status_service(service):
-    """Retourne le status de suricata."""
-    reponse = "☠️"
-    for proc in psutil.process_iter(attrs=['pid', 'name', 'status']):
-        if service in proc.info["name"].lower():
-            reponse = "✅"
-    return reponse
-
-
-def status_cpu():
-    """Retourne le status de suricata."""
-    cpu_percent = psutil.cpu_percent()
-    return str(cpu_percent)
-
-
-def status_ram():
-    ram = psutil.virtual_memory()
-    return str(ram.percent)
-
-
-def temperature_raspberry():
-    temp = psutil.sensors_temperatures()
-    if 'cpu-thermal' in temp:
-        return str(temp['cpu-thermal'][0].current)
-    return "0"
-
-
-def status_str():
-    reponse = "Les infos de votre raspberry:\n"
-    reponse += "<b>Temperature:</b> " + temperature_raspberry() + "°C\n"
-    reponse += "<b>CPU:</b> " + status_ram() + "%\n"
-    reponse += "<b>RAM:</b> " + status_cpu() + "%\n"
-    reponse += "<b>Suricata:</b> " + status_service("suricata") + "\n"
-    reponse += "<b>Arpwatch:</b> " + status_service("arpwatch") + "\n"
-    return reponse
+from src.plugins.sysinfo.sysinfo_job import start_veille
+from src.plugins.sysinfo.sysinfo_tool import status_str
 
 
 @restricted
@@ -68,3 +33,4 @@ def add(dispatcher):
     """
     handler = CommandHandler('sysinfo', sysinfo)
     dispatcher.add_handler(handler)
+    start_veille(dispatcher.job_queue)

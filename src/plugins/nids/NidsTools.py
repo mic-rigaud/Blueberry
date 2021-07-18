@@ -35,14 +35,14 @@ class NidsTools():
             return logs_a_traiter
         except PermissionError:
             logging.error("Permission Error")
-            return "[ERROR] Vous n'avez pas les droits sur le fichier " + self.log
+            return "[ERROR][NIDS] Vous n'avez pas les droits sur le fichier " + self.log
         except FileNotFoundError as exception:
             logging.error(exception)
-            return "[ERROR] Fichier {} introuvable - il est possible que le fichier ne soit pas encore créé. " \
+            return "[ERROR][NIDS] Fichier {} introuvable - il est possible que le fichier ne soit pas encore créé. " \
                    "Reessayez demain.".format(self.log)
         except Exception as exception:
             logging.warning(exception)
-            return "[ERROR] Exception - " + str(exception)
+            return "[ERROR][NIDS] Exception - " + str(exception)
 
     def get_rules(self):
         """Donne les regles appliqués."""

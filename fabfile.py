@@ -107,7 +107,9 @@ def deploy(c):
     # prepare_deploy()
     code_dir = cfg.hosts_dir
     command = "sudo sh -c 'cd {} && git pull'".format(code_dir)
+    command2 = "chown -R blueberry: {}".format(code_dir)
     c.run(command, pty=True)
+    c.run(command2, pty=True)
     c.run('sudo systemctl restart blueberry', warn=True, pty=True)
 
 
