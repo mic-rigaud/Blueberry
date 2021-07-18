@@ -28,6 +28,8 @@ def temperature_raspberry():
     temp = psutil.sensors_temperatures()
     if 'coretemp' in temp:
         return str(temp['coretemp'][0].current)
+    elif 'cpu_thermal' in temp:
+        return str(temp['cpu_thermal'][0].current)
     return "0"
 
 
@@ -42,13 +44,8 @@ def sysinfo_job():
     reponse = ""
     if float(status_disk()) > MAX_DISQUE:
         reponse += "Attention, vous avez dépassé les {}% d'utilisation du disque\n".format(MAX_DISQUE)
-    temp = psutil.sensors_temperatures()
-    if 'coretemp' in temp:
-        current = temp['coretemp'][0].current
-        critical = temp['coretemp'][0].critical
-        pourcent = (current / critical) * 100
-        if pourcent > MAX_TEMPERATURE:
-            reponse += "Attention, votre serveur à chaud. Il a dépassé les {}% de température\n".format(MAX_TEMPERATURE)
+    if float(temperature_raspberry()) > MAX_TEMPERATURE:
+        reponse += "Attention, votre serveur à chaud. Il a dépassé les {}% de température\n".format(MAX_TEMPERATURE)
     return reponse
 
 
