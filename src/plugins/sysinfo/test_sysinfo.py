@@ -6,9 +6,7 @@
 # @License: GNU GPL v3
 
 
-from src.plugins.sysinfo.sysinfo import (status_cpu, status_ram, status_service,
-                                     status_str, temperature_raspberry)
-
+from src.plugins.sysinfo.sysinfo_tool import status_cpu, status_ram, status_service, status_str, temperature_raspberry, status_disk
 
 def test_status_cpu():
     cpu = status_cpu()
@@ -33,3 +31,7 @@ def test_temperature_raspberry():
 def test_status_str():
     temp = status_str()
     assert isinstance(temp, str)
+
+def test_status_disk():
+    disk = status_disk()
+    assert isinstance(disk, str)
