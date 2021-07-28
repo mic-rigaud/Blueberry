@@ -2,7 +2,6 @@ import os
 import shutil
 
 import config as cfg
-
 from src.plugins.nids.nids import nids_alert
 
 
@@ -30,7 +29,7 @@ def test_nids_alert():
     # Test sans fichier
     os.remove(cfg.suricata_log)
     messages = nids_alert()
-    assert "[ERROR] Fichier" in messages[0]
+    assert "[ERROR][NIDS] Fichier" in messages[0]
 
     shutil.copy(cfg.suricata_log + ".old", cfg.suricata_log)
     os.remove(cfg.suricata_log + ".old")

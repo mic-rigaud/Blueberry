@@ -18,10 +18,10 @@ def test_get_last_log():
 
     # Tests négatifs
     logs = NidsTools("fichier introuvable").get_last_log(3600)
-    assert "[ERROR] Fichier" in logs
+    assert "[ERROR][NIDS] Fichier" in logs
 
     logs = NidsTools(cfg.suricata_log).get_last_log("toto")
-    assert "[ERROR] Exception" in logs
+    assert "[ERROR][NIDS] Exception" in logs
 
     logs = NidsTools(cfg.suricata_log).get_last_log(0)
     assert isinstance(logs, list)
