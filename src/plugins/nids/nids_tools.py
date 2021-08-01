@@ -6,12 +6,14 @@
 #    By: michael <michael@mic-rigaud.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/12 12:26:07 by michael           #+#    #+#              #
-#    Updated: 2021/04/10 11:40:42 by michael          ###   ########.fr        #
+#    Updated: 2021/08/01 16:57:54 by michael          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 import logging
 from datetime import datetime
+
+from geolite2 import geolite2
 
 import config as cfg
 from src.api.send_alert import send_alert
@@ -56,7 +58,7 @@ def parse_event(event):
         if "alert" not in event:
             return str(event).replace('\n', '')
         time = datetime.strptime(event["timestamp"], "%Y-%m-%dT%H:%M:%S.%f%z")
-        country = "NA"
+        country = find_country(event['src_ip'])
         http = event["http"] if "http" in event else "NA"
         return f"<b>{event['alert']['signature']}</b>\n" \
                f"time :{time.strftime('%H:%M:%S')}\n" \
@@ -66,6 +68,17 @@ def parse_event(event):
     except Exception as excep:
         logging.warning(str(excep))
         return str(event)
+
+
+def find_country(ip: str) -> str:
+    reader = geolite2.reader()
+    match = reader.get(ip)
+    if not match:
+        return 'NA'
+    if 'country' in match:
+        return match['country']['names']['fr']
+    else:
+        return match['continent']['names']['fr']
 
 
 def nids_alert(all=False):
