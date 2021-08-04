@@ -6,7 +6,7 @@
 #    By: michael <michael@mic-rigaud.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/12 12:26:07 by michael           #+#    #+#              #
-#    Updated: 2021/08/01 16:57:54 by michael          ###   ########.fr        #
+#    Updated: 2021/08/04 21:37:18 by michael          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,16 +95,31 @@ def nids_alert(all=False):
     return message
 
 
-def is_relevant(event, all):
+def is_relevant(event: dict, all: bool) -> bool:
     if all:
         if event["event_type"] == "alert" and event["alert"]["category"] != "Not Suspicious Traffic":
             return True
     else:
-        if event["event_type"] == "alert" and event["alert"]["category"] != "Not Suspicious Traffic" and "SCAN" not in \
-                event['alert']['signature']:
-            return (
-                    "http" not in event
-                    or "redirect" not in event["http"]
-                    or "/yunohost/admin" not in event["http"]["redirect"]
-            )
+        if event["event_type"] == "alert" and event["alert"]["category"] != "Not Suspicious Traffic":
+            if not cfg.nids_exclude_scan:
+                return is_relevant_filter(event)
+            if "SCAN" not in event['alert']['signature']:
+                return is_relevant_filter(event)
         return False
+
+
+def is_relevant_filter(event: dict) -> bool:
+    """filtre_event: filtre les evenements qui respectent les regles définis dans config.py"""
+    regle = cfg.nids_filtre_rule.copy()
+    for key in regle:
+        event_temp = event.copy()
+        regle_temp = regle.copy()[key]
+        while type(regle_temp) == dict:
+            if list(regle_temp.keys())[0] not in event_temp:
+                break
+            event_temp = event_temp[list(regle_temp.keys())[0]]
+            regle_temp = regle_temp[list(regle_temp.keys())[0]]
+        else:
+            if regle_temp in event_temp:
+                return False
+    return True

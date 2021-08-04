@@ -8,7 +8,7 @@
 import config as cfg
 
 from src.plugins.nids.NidsTools import NidsTools
-from src.plugins.nids.nids_tools import find_country
+from src.plugins.nids.nids_tools import find_country, is_relevant_filter
 
 
 def test_get_last_log():
@@ -38,3 +38,14 @@ def test_find_country():
     assert country == "États-Unis"
     country = find_country("127.0.0.1")
     assert country == "NA"
+
+
+def test_filtre_event():
+    event = {"http": {"redirect": "https://8.174.744.10:80/site/admin"}}
+    assert not (is_relevant_filter(event))
+    event = {"http": {"redirect": "https://8.174.744.10:80/coucou"}}
+    assert is_relevant_filter(event)
+    event = {"http": {"redirect": "https://8.174.744.10:80/toto/login"}}
+    assert not (is_relevant_filter(event))
+    event = {"non_filtre": "event_non_filte"}
+    assert is_relevant_filter(event)
