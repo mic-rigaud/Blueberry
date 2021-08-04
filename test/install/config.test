@@ -20,11 +20,11 @@ user = [00000]
 
 # Log
 # Position du fichier de Log
-log = "/builds/mic-rigaud/blueberry/log/blueberry.log"
+log = "/builds/mic-rigaud/Blueberry/log/blueberry.log"
 # Espace ou est installé blueberry
 # Cette variable ne sert que pour l'installation pour construire le fichier
 # blueberry.service
-work_dir = "/builds/mic-rigaud/blueberry"
+work_dir = "/builds/mic-rigaud/Blueberry"
 
 # Ces variables ne sont utilisés que pour le développement.
 # Ne pas les commenter pour que le fabfile fonctionne.
