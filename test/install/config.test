@@ -77,4 +77,5 @@ nids_exclude_scan = True
 # "x" est la premiere clef dans l'evenement suricata
 # "y" est la deuxieme clef (il peut il y avoir autant de clef que necessaire)
 # "z" est l'element qui permet d'exclure la regle
-nids_filtre_rule = {1: {"http": {"redirect": "/site/admin"}}}
+nids_filtre_rule = {1: {"http": {"redirect": "/site/admin"}},
+                    2: {"http": {"redirect": "toto/login"}}}
