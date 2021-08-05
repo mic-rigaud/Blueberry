@@ -8,7 +8,6 @@
 -i https://pypi.org/simple
 alabaster==0.7.12
 apscheduler==3.6.3
-asn1crypto==1.4.0
 atomicwrites==1.4.0
 attrs==21.2.0
 babel==2.9.1
@@ -18,13 +17,11 @@ beautifulsoup4==4.9.3
 blessings==1.7
 cachetools==4.2.2; python_version ~= '3.5'
 certifi==2021.5.30
-cffi==1.14.6
 chardet==4.0.0
 charset-normalizer==2.0.4; python_version >= '3'
 colorzero==2.0
 config==0.5.0.post0
 coverage==5.5
-cryptography==3.4.7
 datetime==4.3
 decorator==5.0.9
 docutils==0.17.1
@@ -68,7 +65,6 @@ requests==2.26.0
 scapy==2.4.5
 schedule==1.1.0
 semantic-version==2.6.0
-six==1.16.0
 smmap==4.0.0
 snowballstemmer==2.1.0
 soupsieve==2.2.1
