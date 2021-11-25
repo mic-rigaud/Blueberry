@@ -11,6 +11,7 @@ include:
 
 stages:
   - test
+  - test-code
 
 before_script:
   - apt-get update -qq && apt-get install -y python3-pip python3 net-tools graphviz traceroute
@@ -26,6 +27,12 @@ test:
   stage: test
   script:
     - invoke test
+
+
+test-code:
+  stage: test-code
+  script:
+    - invoke test-code
 
 code_quality:
   artifacts:
