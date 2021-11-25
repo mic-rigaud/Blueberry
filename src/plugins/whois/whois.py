@@ -21,7 +21,10 @@ from telegram.ext import CallbackContext, CommandHandler
 
 from src.api.Restricted import restricted
 
-ADRESSE = "https://www.whoisxmlapi.com/whoisserver/WhoisService?outputFormat=json&apiKey=" + cfg.whois_key
+ADRESSE = (
+    "https://www.whoisxmlapi.com/whoisserver/WhoisService?outputFormat=json&apiKey="
+    + cfg.whois_key
+)
 
 
 def print_analyse(analyse):
@@ -37,11 +40,17 @@ def print_analyse(analyse):
         reponse = "--- <b>Général</b> ---\n"
         reponse += "Nom: {}\n".format(analyse["WhoisRecord"]["domainName"])
         if "createdDateNormalized" in informations:
-            reponse += "Date de création: {}\n".format(informations["createdDateNormalized"])
+            reponse += "Date de création: {}\n".format(
+                informations["createdDateNormalized"]
+            )
         if "updatedDateNormalized" in informations:
-            reponse += "Dernier update: {}\n".format(informations["updatedDateNormalized"])
+            reponse += "Dernier update: {}\n".format(
+                informations["updatedDateNormalized"]
+            )
         if "expiresDateNormalized" in informations:
-            reponse += "Date d'expiration: {}\n".format(informations["expiresDateNormalized"])
+            reponse += "Date d'expiration: {}\n".format(
+                informations["expiresDateNormalized"]
+            )
         if "registrarName" in informations:
             reponse += "Nom de registre: {}\n".format(informations["registrarName"])
 
@@ -50,7 +59,9 @@ def print_analyse(analyse):
             if "name" in informations["registrant"]:
                 reponse += "Contact: {}\n".format(informations["registrant"]["name"])
             if "organization" in informations["registrant"]:
-                reponse += "Organisation: {}\n".format(informations["registrant"]["organization"])
+                reponse += "Organisation: {}\n".format(
+                    informations["registrant"]["organization"]
+                )
             reponse += "Pays: {}\n".format(informations["registrant"]["country"])
             if "email" in informations["registrant"]:
                 reponse += "Email: {}\n".format(informations["registrant"]["email"])
@@ -59,20 +70,31 @@ def print_analyse(analyse):
             reponse += "\n--- <b>Organisation</b> ---\n"
             if "organization" in informations["administrativeContact"]:
                 reponse += "Contact: {}\n".format(
-                    informations["administrativeContact"]["organization"])
+                    informations["administrativeContact"]["organization"]
+                )
             if "country" in informations["administrativeContact"]:
-                reponse += "Pays: {}\n".format(informations["administrativeContact"]["country"])
+                reponse += "Pays: {}\n".format(
+                    informations["administrativeContact"]["country"]
+                )
             if "email" in informations["administrativeContact"]:
-                reponse += "Email: {}\n".format(informations["administrativeContact"]["email"])
+                reponse += "Email: {}\n".format(
+                    informations["administrativeContact"]["email"]
+                )
 
         if "technicalContact" in informations:
             reponse += "\n--- <b>Contact Technique</b> ---\n"
             if "organization" in informations["technicalContact"]:
-                reponse += "Contact: {}\n".format(informations["technicalContact"]["organization"])
+                reponse += "Contact: {}\n".format(
+                    informations["technicalContact"]["organization"]
+                )
             if "country" in informations["technicalContact"]:
-                reponse += "Pays: {}\n".format(informations["technicalContact"]["country"])
+                reponse += "Pays: {}\n".format(
+                    informations["technicalContact"]["country"]
+                )
             if "email" in informations["technicalContact"]:
-                reponse += "Email: {}\n".format(informations["technicalContact"]["email"])
+                reponse += "Email: {}\n".format(
+                    informations["technicalContact"]["email"]
+                )
 
         if "nameServers" in informations:
             reponse += "\n--- <b>Noms des serveurs</b> ---\n"
@@ -94,15 +116,15 @@ def get_whois(domain):
 @restricted
 def whois(update: Update, context: CallbackContext):
     """Affiche le status de la raspberry."""
-    demande = ' '.join(context.args).lower().split(" ")[0]
+    demande = " ".join(context.args).lower().split(" ")[0]
     reponse = ""
     if demande != "":
         reponse = get_whois(demande)
     else:
-        reponse = "Faire \"/whois <i>domain/ip/email</i>\""
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text=reponse,
-                             parse_mode=telegram.ParseMode.HTML)
+        reponse = 'Faire "/whois <i>domain/ip/email</i>"'
+    context.bot.send_message(
+        chat_id=update.message.chat_id, text=reponse, parse_mode=telegram.ParseMode.HTML
+    )
 
 
 def add(dispatcher):
@@ -110,4 +132,4 @@ def add(dispatcher):
     Renvoi un whois.
     """
     if cfg.whois_key != "0":
-        dispatcher.add_handler(CommandHandler('whois', whois))
+        dispatcher.add_handler(CommandHandler("whois", whois))

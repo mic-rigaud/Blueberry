@@ -17,6 +17,7 @@ from telegram.ext import CallbackContext
 
 def restricted(func):
     """Rends les commandes en restricted."""
+
     @wraps(func)
     def wrapped(update: Update, context: CallbackContext):
         user_id = update.effective_user.id
@@ -24,4 +25,5 @@ def restricted(func):
             logging.info("Access non autorisé pour {}.".format(user_id))
             return
         return func(update, context)
+
     return wrapped

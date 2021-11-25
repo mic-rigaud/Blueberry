@@ -22,8 +22,6 @@ def start_veille(job_queue):
     """Lance la veille."""
     heures = 12
     datetime_heure = time(heures, 35)
-    job_queue.run_daily(job_veille,
-                        datetime_heure,
-                        name="veille_carto")
+    job_queue.run_daily(job_veille, datetime_heure, name="veille_carto")
     logging.info("Veille Topo lancé")
     return "Veille Lancé"

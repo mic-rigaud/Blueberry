@@ -15,12 +15,9 @@ from telegram.ext import CallbackContext
 from src.api.Restricted import restricted
 
 
-def build_menu(buttons,
-               n_cols,
-               header_buttons=None,
-               footer_buttons=None):
+def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
     """Permet de construire un menu interactif."""
-    menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
+    menu = [buttons[i : i + n_cols] for i in range(0, len(buttons), n_cols)]
     if header_buttons:
         menu.insert(0, header_buttons)
     if footer_buttons:
@@ -37,7 +34,7 @@ def button(update: Update, context: CallbackContext):
         data = query.data
 
     module_name = data["module"]
-    mod = __import__("actions." + module_name, fromlist=[''])
+    mod = __import__("actions." + module_name, fromlist=[""])
     reponse, reply_markup = mod.button(update, context)
 
     try:
@@ -46,7 +43,8 @@ def button(update: Update, context: CallbackContext):
             chat_id=query.message.chat_id,
             message_id=query.message.message_id,
             parse_mode=telegram.ParseMode.HTML,
-            reply_markup=reply_markup)
+            reply_markup=reply_markup,
+        )
     except BadRequest as ex:
         logging.error("Error: meme message et meme reply_markup\n" + str(ex))
 
@@ -54,8 +52,7 @@ def button(update: Update, context: CallbackContext):
 def build_callback(data):
     return_value = json.dumps(data)
     if len(return_value) > 64:
-        raise TelegramCallbackError(
-            "Les data ont une taille supérieur à 64 bytes")
+        raise TelegramCallbackError("Les data ont une taille supérieur à 64 bytes")
     return return_value
 
 

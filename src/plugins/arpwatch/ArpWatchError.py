@@ -9,7 +9,7 @@
 class ArpWatchError(Exception):
     def __init__(self, value):
         self.value = value
-        #super(ArpWatchError, self).__init__(value)
+        # super(ArpWatchError, self).__init__(value)
 
     def __str__(self):
         return repr(self.value)

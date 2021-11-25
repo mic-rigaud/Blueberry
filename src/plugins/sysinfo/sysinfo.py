@@ -22,15 +22,15 @@ from src.plugins.sysinfo.sysinfo_tool import status_str
 def sysinfo(update: Update, context: CallbackContext):
     """Affiche le status de la raspberry."""
     reponse = status_str()
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text=reponse,
-                             parse_mode=telegram.ParseMode.HTML)
+    context.bot.send_message(
+        chat_id=update.message.chat_id, text=reponse, parse_mode=telegram.ParseMode.HTML
+    )
 
 
 def add(dispatcher):
     """
     Affiche le status de la raspberry.
     """
-    handler = CommandHandler('sysinfo', sysinfo)
+    handler = CommandHandler("sysinfo", sysinfo)
     dispatcher.add_handler(handler)
     start_veille(dispatcher.job_queue)

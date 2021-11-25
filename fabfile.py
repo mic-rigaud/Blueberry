@@ -11,8 +11,6 @@ from __future__ import with_statement
 from datetime import datetime, timedelta, timezone
 
 from fabric import task
-from invocations.console import confirm
-from invoke import Exit
 
 import config as cfg
 import src.api.BDD as bdd
@@ -22,28 +20,34 @@ my_hosts = cfg.hosts
 
 
 @task
+def test_toto(c):
+    a = c.run("whereis pytest", hide=True, warn=True)
+    print(a.stdout.splitlines()[-1])
+
+
+@task
 def prepare_data_test(c):
     """Creer les data nécéssaires aux tests."""
     offset = timezone(timedelta(hours=2))
     date = datetime.now(offset).strftime("%Y-%m-%dT%H:%M:%S.%f%z")
-    c.run("sed 's/{DATE}/" + date +
-          "/g' src/test/data/suricata-log.temp.json > src/test/data/suricata-log.json")
+    c.run(
+        "sed 's/{DATE}/"
+        + date
+        + "/g' src/test/data/suricata-log.temp.json > src/test/data/suricata-log.json"
+    )
 
 
 @task
 def test(c):
     """Lance test unitaire."""
     prepare_data_test(c)
-    result = c.run(
-        "./venv/bin/python3 -m pytest", warn=True)
-
+    result = c.run("python -m pytest", warn=True)
 
 
 @task
 def test_code(c):
     """Lance code security analyse."""
-    result = c.run("./venv/bin/bandit -r ./ -x *config.py,*test*.py", warn=True)
-
+    result = c.run("bandit -r ./ -x *config.py,*test*.py", warn=True)
 
 
 @task
@@ -59,8 +63,10 @@ def install(c):
 def config_service(c):
     """Configure le service Blueberry."""
     c.run(
-        "sed -e \"s/{{{{dir}}}}/{}/g\" install/blueberry.service >> /etc/systemd/system/blueberry.service".format(
-            cfg.work_dir.replace("/", "\/")))
+        'sed -e "s/{{{{dir}}}}/{}/g" install/blueberry.service >> /etc/systemd/system/blueberry.service'.format(
+            cfg.work_dir.replace("/", "\/")
+        )
+    )
     c.run("chown root: /etc/systemd/system/blueberry.service", warn=True)
 
 
@@ -110,7 +116,7 @@ def deploy(c):
     command2 = "chown -R blueberry: {}".format(code_dir)
     c.run(command, pty=True)
     c.run(command2, pty=True)
-    c.run('sudo systemctl restart blueberry', warn=True, pty=True)
+    c.run("sudo systemctl restart blueberry", warn=True, pty=True)
 
 
 @task(hosts=my_hosts)
@@ -129,4 +135,4 @@ def start_local(c):
 @task(hosts=my_hosts)
 def start_server(c):
     """Start le serveur."""
-    c.run('sudo systemctl start blueberry', warn=True, pty=True)
+    c.run("sudo systemctl start blueberry", warn=True, pty=True)

@@ -21,16 +21,31 @@ def test_get_ip_voisin():
 
 
 def test_str_compact():
-    ip = Ip.create(ip="1.1.1.1", mac="xxx.xxx.xxx.xxx",
-                   time_first=datetime.now(), hostname="hello", status=True)
+    ip = Ip.create(
+        ip="1.1.1.1",
+        mac="xxx.xxx.xxx.xxx",
+        time_first=datetime.now(),
+        hostname="hello",
+        status=True,
+    )
     assert "hello" in ip.str_compact()
     assert "hello" in ip.str_compact()
 
-    ip = Ip.create(ip="1.1.1.1", mac="xxx.xxx.xxx.xxx",
-                   time_first=datetime.now(), hostname="unknown", status=False)
+    ip = Ip.create(
+        ip="1.1.1.1",
+        mac="xxx.xxx.xxx.xxx",
+        time_first=datetime.now(),
+        hostname="unknown",
+        status=False,
+    )
     assert "1.1.1.1" in ip.str_compact()
     assert "❌" in ip.str_compact()
 
-    ip = Ip.create(ip="1.1.1.1", mac="xxx.xxx.xxx.xxx",
-                   time_first=datetime.now(), hostname="hello", alias="bonjour")
+    ip = Ip.create(
+        ip="1.1.1.1",
+        mac="xxx.xxx.xxx.xxx",
+        time_first=datetime.now(),
+        hostname="hello",
+        alias="bonjour",
+    )
     assert "bonjour" in ip.str_compact()

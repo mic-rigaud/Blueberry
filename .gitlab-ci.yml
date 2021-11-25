@@ -10,20 +10,23 @@ include:
 
 
 stages:
-    - build
-    - test
-    - deploy
+  - test
+
+before_script:
+  - apt-get update -qq && apt-get install -y python3-pip python3 net-tools graphviz traceroute
+  - pip3 install poetry
+  - poetry config virtualenvs.create false
+  - poetry install
+  - cp ./test/install/config.test ./config.py
+  - invoke install
+  - invoke prepare-data-test
+
 
 test:
-    stage: test
-    script:
-      - apt-get update -qq && apt-get install -y python3-pip python3 net-tools graphviz traceroute
-      - pip3 install -r requirements.txt
-      - cp ./test/install/config.test ./config.py
-      - fab install
-      - fab prepare-data-test
-      - python3 -m pytest
+  stage: test
+  script:
+    - invoke test
 
 code_quality:
   artifacts:
-    paths: [gl-code-quality-report.json]
+    paths: [ gl-code-quality-report.json ]

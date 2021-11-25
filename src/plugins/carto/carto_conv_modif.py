@@ -10,11 +10,21 @@ from datetime import datetime
 
 import config as cfg
 import telegram
-from telegram import (InlineKeyboardButton, InlineKeyboardMarkup,
-                      KeyboardButton, ReplyKeyboardMarkup, Update)
-from telegram.ext import (CallbackContext, CallbackQueryHandler,
-                          CommandHandler, ConversationHandler, Filters,
-                          MessageHandler)
+from telegram import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    KeyboardButton,
+    ReplyKeyboardMarkup,
+    Update,
+)
+from telegram.ext import (
+    CallbackContext,
+    CallbackQueryHandler,
+    CommandHandler,
+    ConversationHandler,
+    Filters,
+    MessageHandler,
+)
 
 from src.api.api_bdd import get_info
 from src.api.button import build_menu
@@ -29,10 +39,12 @@ def button_modif(update: Update, context: CallbackContext):
     id = query.data.split("_")[2]
     filtre = query.data.split("_")[3]
     context.user_data[0] = {0: id, 1: filtre}
-    context.bot.edit_message_text(chat_id=query.message.chat_id,
-                                  message_id=query.message.message_id,
-                                  text="Quel Alias voulez vous donner ?",
-                                  parse_mode=telegram.ParseMode.HTML)
+    context.bot.edit_message_text(
+        chat_id=query.message.chat_id,
+        message_id=query.message.message_id,
+        text="Quel Alias voulez vous donner ?",
+        parse_mode=telegram.ParseMode.HTML,
+    )
     return ETAPE1
 
 
@@ -47,14 +59,15 @@ def etape1(update: Update, context: CallbackContext):
     reponse = "<b>L'alias a été mis à jour</b>\n\n"
     reponse += get_info(id, Table=Ip)
     reply_markup = carto_creer_bouton_info(id, filtre)
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text=reponse,
-                             parse_mode=telegram.ParseMode.HTML,
-                             reply_markup=reply_markup)
+    context.bot.send_message(
+        chat_id=update.message.chat_id,
+        text=reponse,
+        parse_mode=telegram.ParseMode.HTML,
+        reply_markup=reply_markup,
+    )
     return ConversationHandler.END
 
 
 def conv_cancel(update: Update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text="Bon c'est fini")
+    context.bot.send_message(chat_id=update.message.chat_id, text="Bon c'est fini")
     return ConversationHandler.END

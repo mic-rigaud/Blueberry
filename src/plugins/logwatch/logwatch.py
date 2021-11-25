@@ -31,9 +31,7 @@ def start_veille(job_queue):
     heures = int(cfg.freq_logwatch.split("h")[0])
     minutes = int(cfg.freq_logwatch.split("h")[1])
     datetime_heure = datetime.time(heures, minutes)
-    job_queue.run_daily(job_veille,
-                        datetime_heure,
-                        name="veille_logwatch")
+    job_queue.run_daily(job_veille, datetime_heure, name="veille_logwatch")
     logging.info("Veille lancé")
     return "Veille Lancé"
 
@@ -51,7 +49,7 @@ def get_info_veille(job_queue):
 def logwatch_liste():
     try:
         reponse = ""
-        with open(cfg.logwatch_report, 'r') as file:
+        with open(cfg.logwatch_report, "r") as file:
             for line in file:
                 if line != "\n" and line != " \n":
                     if "End" in line:
@@ -64,13 +62,18 @@ def logwatch_liste():
         return reponse
     except PermissionError:
         logging.error("Permission Error")
-        return "[ERROR] Vous n'avez pas les droits sur le fichier " + cfg.logwatch_report
+        return (
+            "[ERROR] Vous n'avez pas les droits sur le fichier " + cfg.logwatch_report
+        )
     except FileNotFoundError as exception:
         logging.error(exception)
-        return "[ERROR] Fichier {} introuvable - il est possible que le fichier ne soit pas encore créé. Reessayez demain.".format(cfg.logwatch_report)
+        return "[ERROR] Fichier {} introuvable - il est possible que le fichier ne soit pas encore créé. Reessayez demain.".format(
+            cfg.logwatch_report
+        )
     except Exception as exception:
         logging.warning(exception)
         return "[ERROR] Exception - " + str(exception)
+
 
 ###############################################################################
 
@@ -80,7 +83,7 @@ def creer_bouton():
     button_list = [
         InlineKeyboardButton("afficher", callback_data="logwatch_liste"),
         InlineKeyboardButton("etat job", callback_data="logwatch_job"),
-        ]
+    ]
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=2))
 
 
@@ -88,22 +91,26 @@ def button_liste(update: Update, context: CallbackContext):
     query = update.callback_query
     reply_markup = creer_bouton()
     reponse = logwatch_liste()
-    context.bot.edit_message_text(chat_id=query.message.chat_id,
-                                  message_id=query.message.message_id,
-                                  text=reponse,
-                                  parse_mode=telegram.ParseMode.HTML,
-                                  reply_markup=reply_markup)
+    context.bot.edit_message_text(
+        chat_id=query.message.chat_id,
+        message_id=query.message.message_id,
+        text=reponse,
+        parse_mode=telegram.ParseMode.HTML,
+        reply_markup=reply_markup,
+    )
 
 
 def button_job(update: Update, context: CallbackContext):
     query = update.callback_query
     reply_markup = creer_bouton()
     reponse = get_info_veille(context.job_queue)
-    context.bot.edit_message_text(chat_id=query.message.chat_id,
-                                  message_id=query.message.message_id,
-                                  text=reponse,
-                                  parse_mode=telegram.ParseMode.HTML,
-                                  reply_markup=reply_markup)
+    context.bot.edit_message_text(
+        chat_id=query.message.chat_id,
+        message_id=query.message.message_id,
+        text=reponse,
+        parse_mode=telegram.ParseMode.HTML,
+        reply_markup=reply_markup,
+    )
 
 
 @restricted
@@ -111,10 +118,12 @@ def logwatch(update: Update, context: CallbackContext):
     """Gere les log."""
     reponse = "Que puis-je faire pour vous?"
     reply_markup = creer_bouton()
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text=reponse,
-                             parse_mode=telegram.ParseMode.HTML,
-                             reply_markup=reply_markup)
+    context.bot.send_message(
+        chat_id=update.message.chat_id,
+        text=reponse,
+        parse_mode=telegram.ParseMode.HTML,
+        reply_markup=reply_markup,
+    )
 
 
 def add(dispatcher):
@@ -124,7 +133,9 @@ def add(dispatcher):
     ls - affiche les 10 dernieres lignes
     rm - supprime les log
     """
-    dispatcher.add_handler(CommandHandler('logwatch', logwatch, pass_args=True))
+    dispatcher.add_handler(CommandHandler("logwatch", logwatch, pass_args=True))
     dispatcher.add_handler(CallbackQueryHandler(button_job, pattern="^logwatch_job$"))
-    dispatcher.add_handler(CallbackQueryHandler(button_liste, pattern="^logwatch_liste$"))
+    dispatcher.add_handler(
+        CallbackQueryHandler(button_liste, pattern="^logwatch_liste$")
+    )
     start_veille(dispatcher.job_queue)
