@@ -18,20 +18,20 @@ before_script:
   - pip3 install poetry
   - poetry install
   - cp ./test/install/config.test ./config.py
-  - invoke install
-  - invoke prepare-data-test
+  - poetry run invoke install
+  - poetry run invoke prepare-data-test
 
 
 test:
   stage: test
   script:
-    - invoke test
+    - poetry run invoke test
 
 
 test-code:
   stage: test-code
   script:
-    - invoke test-code
+    - poetry run invoke test-code
 
 code_quality:
   artifacts:
