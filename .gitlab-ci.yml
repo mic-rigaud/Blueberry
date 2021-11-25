@@ -5,9 +5,6 @@
 # @Last modified time: 26-Jun-2019
 # @License: GNU GPL v3
 
-include:
-  - template: Code-Quality.gitlab-ci.yml
-
 
 stages:
   - test
@@ -32,7 +29,3 @@ test-code:
   stage: test-code
   script:
     - poetry run invoke test-code
-
-code_quality:
-  artifacts:
-    paths: [ gl-code-quality-report.json ]
