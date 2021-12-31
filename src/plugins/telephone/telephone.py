@@ -20,13 +20,15 @@ ADRESSE_PAGEJAUNE = "https://www.pagesjaunes.fr/annuaireinverse/recherche?quoiqu
 
 
 def parse_sva(soup):
-    message = soup.find_all('tbody')
-    lignes = message[0].find_all('tr')
+    message = soup.find_all("tbody")
+    lignes = message[0].find_all("tr")
     reponse = "<b><u>Service à Valeur Ajoutée</u></b>\n\n"
     for ligne in lignes:
-        colonnes = ligne.find_all('td')
-        reponse += "<b>{}</b> : {}\n".format(colonnes[0].get_text().replace("\n", ""),
-                                             colonnes[1].get_text().replace("\n", ""))
+        colonnes = ligne.find_all("td")
+        reponse += "<b>{}</b> : {}\n".format(
+            colonnes[0].get_text().replace("\n", ""),
+            colonnes[1].get_text().replace("\n", ""),
+        )
         reponse = reponse.replace("  ", "").replace("(données au", " (données au")
     return reponse
 
@@ -48,20 +50,20 @@ def parse_pj(soup):
 def sva_analyse(tel):
     today = datetime.now()
     r = requests.get(ADRESSE_SVA + tel + "&date=" + today.strftime("%d-%m-%Y"))
-    soup = BeautifulSoup(r.text, 'html.parser')
+    soup = BeautifulSoup(r.text, "html.parser")
     return parse_sva(soup)
 
 
 def pj_analyse(tel):
     r = requests.get(ADRESSE_PAGEJAUNE + tel + "&univers=annuaireinverse&idOu=")
-    soup = BeautifulSoup(r.text, 'html.parser')
+    soup = BeautifulSoup(r.text, "html.parser")
     return parse_pj(soup)
 
 
 def get_analyse(tel):
-    re_sva = re.compile('08[0-9]+')
-    re_sva2 = re.compile('118[0-9]+')
-    re_sva3 = re.compile('[3,1][0-9]+')
+    re_sva = re.compile("08[0-9]+")
+    re_sva2 = re.compile("118[0-9]+")
+    re_sva3 = re.compile("[3,1][0-9]+")
     if re_sva.match(tel) or re_sva2.match(tel) or re_sva3.match(tel):
         return sva_analyse(tel)
     return pj_analyse(tel)
@@ -69,17 +71,19 @@ def get_analyse(tel):
 
 def telephone(update: Update, context: CallbackContext):
     """Scan un numéro de téléphone."""
-    demande = ' '.join(context.args).lower().split(" ")[0]
+    demande = " ".join(context.args).lower().split(" ")[0]
     reply_markup = None
     reponse = get_analyse(demande)
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text=reponse,
-                             parse_mode=ParseMode.HTML,
-                             reply_markup=reply_markup)
+    context.bot.send_message(
+        chat_id=update.message.chat_id,
+        text=reponse,
+        parse_mode=ParseMode.HTML,
+        reply_markup=reply_markup,
+    )
 
 
 def add(dispatcher):
     """
     Scan un numéro de téléphone.
     """
-    dispatcher.add_handler(CommandHandler('telephone', telephone))
+    dispatcher.add_handler(CommandHandler("telephone", telephone))

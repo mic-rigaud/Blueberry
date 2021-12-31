@@ -30,8 +30,8 @@ def mqPull(updater):
             message = message.replace("\\n", "\n")
             logging.info("Reception de l'alerte : " + message)
             for chat_id in cfg.user:
-                updater.bot.send_message(chat_id=chat_id,
-                                         text=str(message),
-                                         parse_mode=ParseMode.HTML)
+                updater.bot.send_message(
+                    chat_id=chat_id, text=str(message), parse_mode=ParseMode.HTML
+                )
         else:
             logging.info("Erreur task inconnu : {}".format(str(task)))

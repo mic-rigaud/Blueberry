@@ -22,7 +22,7 @@ def file_ajouter(file, key, values):
         return "<i>L'élément est déjà présent</i>"
     values["id"] = len(contenu) + 1
     contenu[key] = values
-    with open(file, 'w') as fichier:
+    with open(file, "w") as fichier:
         fichier.write(json.dumps(contenu, indent=4))
     return "<i>Elément ajouté avec succes</i>"
 
@@ -38,7 +38,7 @@ def file_supprimer(file, id):
                 contenu2.pop(element)
             elif int(id) < int(contenu[element]["id"]):
                 contenu2[element]["id"] = int(contenu[element]["id"]) - 1
-        with open(file, 'w') as fichier:
+        with open(file, "w") as fichier:
             fichier.write(json.dumps(contenu2, indent=4))
         return "Effacement avec succes"
     except FileNotFoundError:

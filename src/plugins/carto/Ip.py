@@ -8,8 +8,7 @@
 from datetime import datetime
 
 import config as cfg
-from peewee import (BooleanField, CharField, DateTimeField, FloatField,
-                    IntegerField)
+from peewee import BooleanField, CharField, DateTimeField, FloatField, IntegerField
 
 from src.api.BDD import BaseModel
 

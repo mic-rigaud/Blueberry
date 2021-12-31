@@ -11,7 +11,7 @@ import logging
 from datetime import datetime, timedelta, timezone
 
 
-class NidsTools():
+class NidsTools:
     """Classe permettant de gerer Suricata. Caractérisé par:
     - log.
     """
@@ -25,9 +25,9 @@ class NidsTools():
             offset_fr = timezone(timedelta(hours=2))
             date_last_veille = datetime.now(offset_fr) - timedelta(seconds=intervalle)
             logs_a_traiter = []
-            with open(self.log, 'r') as file:
+            with open(self.log, "r") as file:
                 for line in file:
-                    line = line.replace('\0', '')
+                    line = line.replace("\0", "")
                     log = json.loads(line)
                     date = datetime.strptime(log["timestamp"], "%Y-%m-%dT%H:%M:%S.%f%z")
                     if date > date_last_veille:
@@ -38,8 +38,10 @@ class NidsTools():
             return "[ERROR][NIDS] Vous n'avez pas les droits sur le fichier " + self.log
         except FileNotFoundError as exception:
             logging.error(exception)
-            return "[ERROR][NIDS] Fichier {} introuvable - il est possible que le fichier ne soit pas encore créé. " \
-                   "Reessayez demain.".format(self.log)
+            return (
+                "[ERROR][NIDS] Fichier {} introuvable - il est possible que le fichier ne soit pas encore créé. "
+                "Reessayez demain.".format(self.log)
+            )
         except Exception as exception:
             logging.warning(exception)
             return "[ERROR][NIDS] Exception - " + str(exception)

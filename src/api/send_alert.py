@@ -11,7 +11,9 @@ import telegram
 
 def send_alert(context, message, reply_markup=None):
     for chat_id in cfg.user:
-        context.bot.send_message(chat_id=chat_id,
-                                 text=message,
-                                 parse_mode=telegram.ParseMode.HTML,
-                                 reply_markup=reply_markup)
+        context.bot.send_message(
+            chat_id=chat_id,
+            text=message,
+            parse_mode=telegram.ParseMode.HTML,
+            reply_markup=reply_markup,
+        )

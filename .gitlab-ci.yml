@@ -5,25 +5,27 @@
 # @Last modified time: 26-Jun-2019
 # @License: GNU GPL v3
 
-include:
-  - template: Code-Quality.gitlab-ci.yml
-
 
 stages:
-    - build
-    - test
-    - deploy
+  - test
+  - test-code
+
+before_script:
+  - apt-get update -qq && apt-get install -y python3-pip python3 net-tools graphviz traceroute
+  - pip3 install poetry
+  - poetry install
+  - cp ./test/install/config.test ./config.py
+  - poetry run invoke install
+  - poetry run invoke prepare-data-test
+
 
 test:
-    stage: test
-    script:
-      - apt-get update -qq && apt-get install -y python3-pip python3 net-tools graphviz traceroute
-      - pip3 install -r requirements.txt
-      - cp ./test/install/config.test ./config.py
-      - fab install
-      - fab prepare-data-test
-      - python3 -m pytest
+  stage: test
+  script:
+    - poetry run invoke test
 
-code_quality:
-  artifacts:
-    paths: [gl-code-quality-report.json]
+
+test-code:
+  stage: test-code
+  script:
+    - poetry run invoke test-code

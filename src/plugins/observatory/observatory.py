@@ -20,8 +20,12 @@ from telegram.ext import CallbackContext, CommandHandler
 
 from src.api.Restricted import restricted
 
-ADRESSE_HTTP_ANALYZE = "https://http-observatory.security.mozilla.org/api/v1/analyze?host="
-ADRESSE_HTTP_SCAN = "https://http-observatory.security.mozilla.org/api/v1/getScanResults?scan="
+ADRESSE_HTTP_ANALYZE = (
+    "https://http-observatory.security.mozilla.org/api/v1/analyze?host="
+)
+ADRESSE_HTTP_SCAN = (
+    "https://http-observatory.security.mozilla.org/api/v1/getScanResults?scan="
+)
 ADRESSE_TLS_SCAN = "https://tls-observatory.services.mozilla.com/api/v1/scan?target="
 ADRESSE_TLS_RESULT = "https://tls-observatory.services.mozilla.com/api/v1/results?id="
 
@@ -44,10 +48,12 @@ def print_scan(scan):
         reponse = ""
         for element in scan:
             if scan[element]["score_modifier"] != 0:
-                reponse += "• <b>{}</b> ({})\n{}\n".format(scan[element]["name"],
-                                                           scan[element]["score_modifier"],
-                                                           scan[element]["score_description"])
-        reponse += "<b><a href=\"https://infosec.mozilla.org/guidelines/web_security\">PLUS D'INFO</a></b>\n"
+                reponse += "• <b>{}</b> ({})\n{}\n".format(
+                    scan[element]["name"],
+                    scan[element]["score_modifier"],
+                    scan[element]["score_description"],
+                )
+        reponse += '<b><a href="https://infosec.mozilla.org/guidelines/web_security">PLUS D\'INFO</a></b>\n'
         return reponse
     except KeyError:
         logging.error("Result retournée par observatory erronée")
@@ -122,22 +128,24 @@ def get_tls_observatory(url):
 @restricted
 def observatory(update: Update, context: CallbackContext):
     """Scan une adresse url via observatory."""
-    demande = ' '.join(context.args).lower().split(" ")[0]
+    demande = " ".join(context.args).lower().split(" ")[0]
     reponse = ""
     if demande != "":
         reponse = get_http_observatory(demande)
         if demande in reponse:
             reponse += get_tls_observatory(demande)
     else:
-        reponse = "Faire \"/observatory <i>url</i>\" pour scanner une url"
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text=reponse,
-                             parse_mode=ParseMode.HTML,
-                             disable_web_page_preview=True)
+        reponse = 'Faire "/observatory <i>url</i>" pour scanner une url'
+    context.bot.send_message(
+        chat_id=update.message.chat_id,
+        text=reponse,
+        parse_mode=ParseMode.HTML,
+        disable_web_page_preview=True,
+    )
 
 
 def add(dispatcher):
     """
     Scan une adresse url via observatory.
     """
-    dispatcher.add_handler(CommandHandler('observatory', observatory))
+    dispatcher.add_handler(CommandHandler("observatory", observatory))

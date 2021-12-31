@@ -14,9 +14,6 @@ def job_veille(context):
 
 def start_veille(job_queue):
     """Lance la veille."""
-    job_queue.run_repeating(job_veille,
-                            360,
-                            first=5,
-                            name="veille_sysinfo")
+    job_queue.run_repeating(job_veille, 360, first=5, name="veille_sysinfo")
     logging.info("Veille Sysinfo lancé")
     return "Veille Lancé"

@@ -7,7 +7,7 @@
 from peewee import BooleanField, CharField, DateTimeField, IntegerField, Model
 from playhouse.sqlite_ext import SqliteDatabase
 
-db = SqliteDatabase('./network.db')
+db = SqliteDatabase("./network.db")
 
 
 class BaseModel(Model):
@@ -15,4 +15,5 @@ class BaseModel(Model):
 
     class Meta:
         """Classe Meta."""
+
         database = db

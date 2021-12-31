@@ -23,8 +23,7 @@ def log_liste():
     reponse = "<b>Voici les 10 derniers log:</b>\n"
     with open(cfg.log, "r") as file:
         for ligne in file.readlines()[-10:]:
-            reponse += ligne.replace("<", "").replace("module",
-                                                      "main").replace(">", "")
+            reponse += ligne.replace("<", "").replace("module", "main").replace(">", "")
     return reponse
 
 
@@ -42,7 +41,7 @@ def creer_bouton():
     button_list = [
         InlineKeyboardButton("liste", callback_data="log_liste"),
         InlineKeyboardButton("supprimer", callback_data="log_supprimer"),
-        ]
+    ]
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=2))
 
 
@@ -50,22 +49,26 @@ def button_liste(update: Update, context: CallbackContext):
     query = update.callback_query
     reply_markup = creer_bouton()
     reponse = log_liste()
-    context.bot.edit_message_text(chat_id=query.message.chat_id,
-                                  message_id=query.message.message_id,
-                                  text=reponse,
-                                  parse_mode=telegram.ParseMode.HTML,
-                                  reply_markup=reply_markup)
+    context.bot.edit_message_text(
+        chat_id=query.message.chat_id,
+        message_id=query.message.message_id,
+        text=reponse,
+        parse_mode=telegram.ParseMode.HTML,
+        reply_markup=reply_markup,
+    )
 
 
 def button_supprimer(update: Update, context: CallbackContext):
     query = update.callback_query
     reply_markup = creer_bouton()
     reponse = log_rm()
-    context.bot.edit_message_text(chat_id=query.message.chat_id,
-                                  message_id=query.message.message_id,
-                                  text=reponse,
-                                  parse_mode=telegram.ParseMode.HTML,
-                                  reply_markup=reply_markup)
+    context.bot.edit_message_text(
+        chat_id=query.message.chat_id,
+        message_id=query.message.message_id,
+        text=reponse,
+        parse_mode=telegram.ParseMode.HTML,
+        reply_markup=reply_markup,
+    )
 
 
 @restricted
@@ -73,10 +76,12 @@ def log(update: Update, context: CallbackContext):
     """Gere les log."""
     reponse = log_liste()
     reply_markup = creer_bouton()
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text=reponse,
-                             parse_mode=telegram.ParseMode.HTML,
-                             reply_markup=reply_markup)
+    context.bot.send_message(
+        chat_id=update.message.chat_id,
+        text=reponse,
+        parse_mode=telegram.ParseMode.HTML,
+        reply_markup=reply_markup,
+    )
 
 
 def add(dispatcher):
@@ -86,6 +91,8 @@ def add(dispatcher):
     ls - affiche les 10 dernieres lignes
     rm - supprime les log
     """
-    dispatcher.add_handler(CommandHandler('log', log, pass_args=True))
-    dispatcher.add_handler(CallbackQueryHandler(button_supprimer, pattern="^log_supprimer$"))
+    dispatcher.add_handler(CommandHandler("log", log, pass_args=True))
+    dispatcher.add_handler(
+        CallbackQueryHandler(button_supprimer, pattern="^log_supprimer$")
+    )
     dispatcher.add_handler(CallbackQueryHandler(button_liste, pattern="^log_liste$"))

@@ -18,8 +18,11 @@ from src.plugins.carto.Ip import Ip
 def creer_button_ip():
     button_list = []
     for ip in Ip.select():
-        button_list.append(InlineKeyboardButton(
-            ip.str_compact(), callback_data="carto_info_{}".format(ip.id)))
+        button_list.append(
+            InlineKeyboardButton(
+                ip.str_compact(), callback_data="carto_info_{}".format(ip.id)
+            )
+        )
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
 
 
@@ -54,14 +57,14 @@ def get_ip_voisin(ip):
         voisin = routes[len(routes) - 3]
         if "* * *" in voisin:
             return "None"
-        return voisin.split('(')[1].split(')')[0]
+        return voisin.split("(")[1].split(")")[0]
 
 
 def remplir_ip_voisin():
     reponse = ""
     for ip in Ip.select():
         ip_voisin = get_ip_voisin(ip.ip)
-        reponse += ip_voisin + '\n'
+        reponse += ip_voisin + "\n"
         record = Ip.select().where((Ip.ip == ip.ip))
         element = record.get()
         element.ip_voisin = ip_voisin
@@ -71,7 +74,7 @@ def remplir_ip_voisin():
 
 def creer_carto():
     dict_ip_voisin = {}
-    dot = Digraph(name='Network', format='png')
+    dot = Digraph(name="Network", format="png")
     dot.node(get_myip(), label="blueberry")
     for ip in Ip.select():
         if ip.ip_voisin != "None":
@@ -86,17 +89,17 @@ def creer_carto():
     for ip in dict_ip_voisin:
         if dict_ip_voisin[ip] > 1:
             if ip == get_myip():
-                dot.node('swicth-blueberry')
-                dot.edge(ip, 'swicth-blueberry')
+                dot.node("swicth-blueberry")
+                dot.edge(ip, "swicth-blueberry")
             else:
-                dot.node('swicth-' + ip)
+                dot.node("swicth-" + ip)
     for ip in Ip.select():
         if ip.ip_voisin != "None":
             if ip.ip_voisin in dict_ip_voisin and dict_ip_voisin[ip.ip_voisin] > 1:
                 if ip.ip_voisin == get_myip():
-                    dot.edge(ip.ip, 'swicth-blueberry')
+                    dot.edge(ip.ip, "swicth-blueberry")
                 else:
-                    dot.edge(ip.ip, 'swicth-' + ip.ip_voisin)
+                    dot.edge(ip.ip, "swicth-" + ip.ip_voisin)
             else:
                 dot.edge(ip.ip, ip.ip_voisin)
     dot.render()
@@ -104,14 +107,27 @@ def creer_carto():
 
 def carto_creer_bouton_info(id, filtre):
     button_list = []
-    button_list.append(InlineKeyboardButton(
-        "Ping", callback_data="carto_ping_{}_{}".format(id, filtre)))
-    button_list.append(InlineKeyboardButton(
-        "Scan", callback_data="carto_scan_{}_{}".format(id, filtre)))
-    button_list.append(InlineKeyboardButton(
-        "Supprimer", callback_data="carto_scan_{}_{}".format(id, filtre)))
-    button_list.append(InlineKeyboardButton(
-        "Modifier", callback_data="carto_modifier_{}_{}".format(id, filtre)))
-    button_list.append(InlineKeyboardButton(
-        "Retour", callback_data="carto_lister_{}".format(filtre)))
+    button_list.append(
+        InlineKeyboardButton(
+            "Ping", callback_data="carto_ping_{}_{}".format(id, filtre)
+        )
+    )
+    button_list.append(
+        InlineKeyboardButton(
+            "Scan", callback_data="carto_scan_{}_{}".format(id, filtre)
+        )
+    )
+    button_list.append(
+        InlineKeyboardButton(
+            "Supprimer", callback_data="carto_scan_{}_{}".format(id, filtre)
+        )
+    )
+    button_list.append(
+        InlineKeyboardButton(
+            "Modifier", callback_data="carto_modifier_{}_{}".format(id, filtre)
+        )
+    )
+    button_list.append(
+        InlineKeyboardButton("Retour", callback_data="carto_lister_{}".format(filtre))
+    )
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=2))

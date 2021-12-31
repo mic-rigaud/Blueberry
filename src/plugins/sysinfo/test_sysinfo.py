@@ -6,9 +6,14 @@
 # @License: GNU GPL v3
 
 
-from src.plugins.sysinfo.sysinfo_tool import (status_cpu, status_ram,
-                                              status_service, status_str,
-                                              temperature_raspberry, status_disk)
+from src.plugins.sysinfo.sysinfo_tool import (
+    status_cpu,
+    status_ram,
+    status_service,
+    status_str,
+    temperature_raspberry,
+    status_disk,
+)
 
 
 def test_status_cpu():

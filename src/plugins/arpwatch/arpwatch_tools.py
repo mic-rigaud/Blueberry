@@ -21,31 +21,40 @@ def arpwatch_mqalert(context):
         for i in elements:
             element = elements[i]
             if not isempty(element) and add_element(element):
-                message = "Un nouvel appareil repéré sur le réseau:\n" + \
-                    "{}  {}  {}\n".format(element["hostname"], element["ip"],
-                                          element["timestamp"])
+                message = (
+                    "Un nouvel appareil repéré sur le réseau:\n"
+                    + "{}  {}  {}\n".format(
+                        element["hostname"], element["ip"], element["timestamp"]
+                    )
+                )
                 send_alert(context, message)
     except ArpWatchError as exception:
         send_alert(context, str(exception))
 
 
 def isempty(element):
-    return element["hostname"] == "" and element["ip"] == "" and element["timestamp"] == ""
+    return (
+        element["hostname"] == "" and element["ip"] == "" and element["timestamp"] == ""
+    )
 
 
 def arpwatch_read():
     """Cette fonction permet de gerer les erreurs."""
     try:
-        with open(cfg.arpwatch_mail, 'r') as file:
+        with open(cfg.arpwatch_mail, "r") as file:
             return parse(file.readlines())
     except PermissionError:
         logging.error("Permission Error")
         raise ArpWatchError(
-            "[ERROR] Vous n'avez pas les droits sur le fichier " + cfg.arpwatch_mail)
+            "[ERROR] Vous n'avez pas les droits sur le fichier " + cfg.arpwatch_mail
+        )
     except FileNotFoundError as exception:
         logging.error(exception)
         raise ArpWatchError(
-            "[ERROR] Fichier {} introuvable - Etes vous sur que arpwatch fonctionne? Reesayez dans quelques secondes.".format(cfg.arpwatch_mail))
+            "[ERROR] Fichier {} introuvable - Etes vous sur que arpwatch fonctionne? Reesayez dans quelques secondes.".format(
+                cfg.arpwatch_mail
+            )
+        )
     except Exception as exception:
         logging.warning(exception)
         raise ArpWatchError("[ERROR] Exception - " + str(exception))
@@ -58,24 +67,29 @@ def parse(lines):
     for line in lines:
         if line == "---\n":
             i += 1
-            retour[i] = {"hostname": "",
-                         "ip": "",
-                         "vendor": "",
-                         "timestamp": "",
-                         "mac": ""}
+            retour[i] = {
+                "hostname": "",
+                "ip": "",
+                "vendor": "",
+                "timestamp": "",
+                "mac": "",
+            }
         elif "hostname" in line:
-            retour[i]["hostname"] = line.split(': ')[1].replace(
-                '\n', '').replace('<', '').replace('>', '')
+            retour[i]["hostname"] = (
+                line.split(": ")[1].replace("\n", "").replace("<", "").replace(">", "")
+            )
         elif "ip address" in line:
-            retour[i]["ip"] = line.split(': ')[1].replace('\n', '')
+            retour[i]["ip"] = line.split(": ")[1].replace("\n", "")
         elif "ethernet vendor" in line:
-            retour[i]["vendor"] = line.split(': ')[1].replace('\n', '')
+            retour[i]["vendor"] = line.split(": ")[1].replace("\n", "")
         elif "timestamp" in line:
-            timestamp = line.split(': ')[1].replace('\n', '')
-            datetime_time = datetime.datetime.strptime(timestamp, "%A, %B %d, %Y %H:%M:%S %z")
+            timestamp = line.split(": ")[1].replace("\n", "")
+            datetime_time = datetime.datetime.strptime(
+                timestamp, "%A, %B %d, %Y %H:%M:%S %z"
+            )
             retour[i]["timestamp"] = datetime_time.strftime("%d/%m/%y-%X")
         elif "ethernet address" in line:
-            retour[i]["mac"] = line.split(': ')[1].replace('\n', '')
+            retour[i]["mac"] = line.split(": ")[1].replace("\n", "")
     return retour
 
 
@@ -85,8 +99,9 @@ def arpwatch_liste():
         contenu = arpwatch_read()
         for i in contenu:
             element = contenu[i]
-            reponse += "{}  {}  {}\n".format(element["hostname"], element["ip"],
-                                             element["timestamp"])
+            reponse += "{}  {}  {}\n".format(
+                element["hostname"], element["ip"], element["timestamp"]
+            )
         reponse = reponse.replace("<", "").replace(">", "")
         return reponse
     except ArpWatchError as exception:
@@ -98,8 +113,12 @@ def add_element(element):
     record = Ip.select().where((Ip.ip == element["ip"]) & (Ip.mac == element["mac"]))
     if not record.exists():
         date = datetime.datetime.strptime(element["timestamp"], "%d/%m/%y-%X")
-        Ip.create(ip=element["ip"], mac=element["mac"],
-                  time_first=date, hostname=element["hostname"]).save()
+        Ip.create(
+            ip=element["ip"],
+            mac=element["mac"],
+            time_first=date,
+            hostname=element["hostname"],
+        ).save()
         logging.info("Ajout du couple: {}, {}".format(element["mac"], element["ip"]))
         return True
     return False
