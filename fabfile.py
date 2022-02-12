@@ -63,7 +63,7 @@ def install(c):
 def config_service(c):
     """Configure le service Blueberry."""
     c.run(
-        'sed -e "s/{{{{dir}}}}/{}/g" install/blueberry.service >> /etc/systemd/system/blueberry.service'.format(
+        'sed -e "s/{{{{dir}}}}/{}/g" ressources/blueberry.service >> /etc/systemd/system/blueberry.service'.format(
             cfg.work_dir.replace("/", "\/")
         )
     )

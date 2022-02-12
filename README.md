@@ -11,6 +11,8 @@ Cet outil permet superviser via Telegram un ensemble d'autre outils de s√©curit√
 - [logwatch](https://doc.ubuntu-fr.org/logwatch)
 - [arpwatch](https://linux.die.net/man/8/arpwatch)
 
+![capture-telegram](https://raw.githubusercontent.com/mic-rigaud/Blueberry/master/ressources/capture-telegram.png)
+
 ## Commandes disponibles
 
 `\help` permet d'afficher les commandes disponibles
